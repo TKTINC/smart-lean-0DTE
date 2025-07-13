@@ -344,3 +344,35 @@ TARGET_UPTIME=99.5
 # - Data: $200-500 (Databento optimized)
 # - Total: $330-675/month vs $3000-8000 enterprise
 
+
+
+# =============================================================================
+# REQUIRED ENVIRONMENT VARIABLES (Set these for production)
+# =============================================================================
+
+# Database Password
+POSTGRES_PASSWORD=lean_dev_password_change_in_production
+
+# API Keys (Required for live trading)
+DATABENTO_API_KEY=your_databento_api_key_here
+IBKR_USERNAME=your_ibkr_username_here
+IBKR_PASSWORD=your_ibkr_password_here
+
+# Notification Settings
+NOTIFICATION_EMAIL=your-email@company.com
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/your/webhook/url
+
+# AWS Configuration (Optional for local development)
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_REGION=us-east-1
+
+# =============================================================================
+# DEVELOPMENT OVERRIDES
+# =============================================================================
+
+# For local development, use demo/test values
+PAPER_TRADING=true
+DEMO_MODE=true
+MOCK_DATA_ENABLED=true
+

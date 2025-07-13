@@ -88,7 +88,7 @@ echo -e "${BLUE}⏳ Waiting for services to be ready...${NC}"
 # Wait for PostgreSQL
 echo "Waiting for PostgreSQL..."
 for i in {1..30}; do
-    if docker-compose exec -T postgres pg_isready -U postgres &>/dev/null; then
+    if docker-compose exec -T postgres pg_isready -U smart0dte_lean &>/dev/null; then
         break
     fi
     sleep 2

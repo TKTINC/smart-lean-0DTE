@@ -1,0 +1,41 @@
+# Smart-Lean-0DTE Enhanced Requirements
+# Core FastAPI and web framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+
+# Data handling and validation
+python-multipart==0.0.6
+python-jose[cryptography]==3.3.0
+
+# Date and time handling
+pytz==2023.3
+
+# HTTP client for external APIs
+httpx==0.25.2
+aiohttp==3.9.1
+
+# Data processing and analysis
+numpy==1.24.3
+pandas==2.0.3
+
+# Mathematical operations
+scipy==1.11.4
+
+# Async support
+asyncio-mqtt==0.16.1
+
+# Environment and configuration
+python-dotenv==1.0.0
+
+# Logging and monitoring
+structlog==23.2.0
+
+# Testing (optional, for development)
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# Development tools (optional)
+black==23.11.0
+flake8==6.1.0
+

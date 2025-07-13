@@ -4,17 +4,24 @@ FROM node:18-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package.json package-lock.json ./
+# Debug: Show what's in the build context
+RUN echo "=== Build context contents ===" && ls -la /
 
-# Debug: List files to verify copy worked
-RUN ls -la /app/
+# Copy package files with error handling
+COPY package.json ./
+COPY package-lock.json ./
+
+# Debug: Verify files were copied
+RUN echo "=== Files in /app after copy ===" && ls -la /app/
 
 # Install dependencies
 RUN npm ci --omit=dev
 
 # Copy source code
 COPY . .
+
+# Debug: Show final structure
+RUN echo "=== Final structure ===" && ls -la /app/
 
 # Build the application
 RUN npm run build
@@ -26,7 +33,7 @@ FROM nginx:alpine
 COPY --from=builder /app/build /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
 
 # Expose port
 EXPOSE 3000

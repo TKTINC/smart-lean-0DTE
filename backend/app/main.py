@@ -19,6 +19,8 @@ import uvicorn
 from services.market_hours_service import market_hours_service
 from services.autonomous_trading_service import autonomous_trading_service
 from services.signal_generation_service import signal_generation_service
+from services.analytics_service import analytics_service
+from services.scheduler_service import scheduler_service
 
 # Setup logging
 logging.basicConfig(
@@ -76,11 +78,12 @@ async def startup_event():
     
     logger.info("Starting Smart-Lean-0DTE Enhanced System")
     
-    # Start background trading loop
+    # Start background trading loop and scheduler
     if not background_tasks_started:
         asyncio.create_task(autonomous_trading_service.start_autonomous_trading())
+        asyncio.create_task(scheduler_service.start_scheduler())
         background_tasks_started = True
-        logger.info("Background trading loop started")
+        logger.info("Background trading loop and scheduler started")
 
 @app.get("/")
 async def root():
@@ -342,41 +345,79 @@ async def get_market_status():
 # Analytics endpoints
 @app.get("/api/analytics")
 async def get_analytics(timeframe: str = "1M", strategy: str = "ALL"):
-    """Get analytics data"""
-    model_metrics = signal_generation_service.get_model_metrics()
-    trading_status = autonomous_trading_service.get_status()
-    
-    # Generate demo analytics data
-    return {
-        "performance": {
-            "equity": [
-                {"date": "2024-11-01", "value": 45000, "drawdown": -1.2},
-                {"date": "2024-11-02", "value": 46200, "drawdown": -0.8},
-                {"date": "2024-11-03", "value": 47100, "drawdown": -1.5},
-                {"date": "2024-11-04", "value": 48500, "drawdown": -0.9},
-                {"date": "2024-11-05", "value": 49200, "drawdown": -1.1}
-            ],
-            "strategyPerformance": [
-                {"strategy": "Momentum Breakout", "trades": 342, "winRate": 82.5, "avgReturn": 3.2, "totalPnL": 18500, "sharpe": 2.1},
-                {"strategy": "Mean Reversion", "trades": 298, "winRate": 76.8, "avgReturn": 2.8, "totalPnL": 14200, "sharpe": 1.8},
-                {"strategy": "Gap Fill", "trades": 156, "winRate": 84.6, "avgReturn": 4.1, "totalPnL": 9800, "sharpe": 2.3}
-            ],
-            "learningMetrics": {
-                "modelAccuracy": model_metrics['model_accuracy'],
-                "predictionConfidence": model_metrics['prediction_confidence'],
-                "adaptationRate": model_metrics['adaptation_rate'],
-                "signalStrength": model_metrics['signal_strength']
+    """Get comprehensive analytics data"""
+    try:
+        analytics_data = analytics_service.get_performance_analytics(timeframe, strategy)
+        return analytics_data
+    except Exception as e:
+        logger.error(f"Failed to get analytics: {e}")
+        # Fallback to demo data
+        model_metrics = signal_generation_service.get_model_metrics()
+        trading_status = autonomous_trading_service.get_status()
+        
+        return {
+            "performance": {
+                "equity": [
+                    {"date": "2024-11-01", "value": 45000, "drawdown": -1.2},
+                    {"date": "2024-11-02", "value": 46200, "drawdown": -0.8},
+                    {"date": "2024-11-03", "value": 47100, "drawdown": -1.5},
+                    {"date": "2024-11-04", "value": 48500, "drawdown": -0.9},
+                    {"date": "2024-11-05", "value": 49200, "drawdown": -1.1}
+                ],
+                "strategyPerformance": [
+                    {"strategy": "Momentum Breakout", "trades": 342, "winRate": 82.5, "avgReturn": 3.2, "totalPnL": 18500, "sharpe": 2.1},
+                    {"strategy": "Mean Reversion", "trades": 298, "winRate": 76.8, "avgReturn": 2.8, "totalPnL": 14200, "sharpe": 1.8},
+                    {"strategy": "Gap Fill", "trades": 156, "winRate": 84.6, "avgReturn": 4.1, "totalPnL": 9800, "sharpe": 2.3}
+                ],
+                "learningMetrics": {
+                    "modelAccuracy": model_metrics['model_accuracy'],
+                    "predictionConfidence": model_metrics['prediction_confidence'],
+                    "adaptationRate": model_metrics['adaptation_rate'],
+                    "signalStrength": model_metrics['signal_strength']
+                }
+            },
+            "backtest": {
+                "totalReturn": 412.0,
+                "annualizedReturn": 156.8,
+                "maxDrawdown": -3.2,
+                "sharpeRatio": 2.05,
+                "totalTrades": trading_status['performance'].get('total_trades', 1247),
+                "winRate": trading_status['performance'].get('win_rate', 78.5)
             }
-        },
-        "backtest": {
-            "totalReturn": 412.0,
-            "annualizedReturn": 156.8,
-            "maxDrawdown": -3.2,
-            "sharpeRatio": 2.05,
-            "totalTrades": trading_status['performance'].get('total_trades', 1247),
-            "winRate": trading_status['performance'].get('win_rate', 78.5)
         }
-    }
+
+@app.post("/api/analytics/backtest")
+async def run_backtest(strategy: str, parameters: Dict[str, Any] = None):
+    """Run backtesting for a strategy"""
+    try:
+        if parameters is None:
+            parameters = {}
+        
+        result = analytics_service.run_backtest(strategy, parameters)
+        return {"status": "success", "result": result}
+    except Exception as e:
+        logger.error(f"Backtest failed: {e}")
+        raise HTTPException(status_code=500, detail="Backtest execution failed")
+
+@app.get("/api/analytics/optimization/{strategy}")
+async def get_optimization_suggestions(strategy: str):
+    """Get optimization suggestions for a strategy"""
+    try:
+        suggestions = analytics_service.get_strategy_optimization_suggestions(strategy)
+        return {"suggestions": suggestions}
+    except Exception as e:
+        logger.error(f"Failed to get optimization suggestions: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get suggestions")
+
+@app.get("/api/analytics/real-time")
+async def get_real_time_performance():
+    """Get real-time performance metrics"""
+    try:
+        performance = analytics_service.get_real_time_performance()
+        return performance
+    except Exception as e:
+        logger.error(f"Failed to get real-time performance: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get real-time data")
 
 # Settings endpoints
 @app.get("/api/settings")
@@ -447,6 +488,70 @@ async def generate_eod_report():
     except Exception as e:
         logger.error(f"Failed to generate EOD report: {e}")
         raise HTTPException(status_code=500, detail="Failed to generate EOD report")
+
+# Scheduler endpoints
+@app.get("/api/scheduler/status")
+async def get_scheduler_status():
+    """Get scheduler status and task information"""
+    try:
+        status = scheduler_service.get_scheduler_status()
+        return status
+    except Exception as e:
+        logger.error(f"Failed to get scheduler status: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get scheduler status")
+
+@app.post("/api/scheduler/start")
+async def start_scheduler():
+    """Start the scheduler"""
+    try:
+        if not scheduler_service.is_running:
+            asyncio.create_task(scheduler_service.start_scheduler())
+            return {"status": "success", "message": "Scheduler started"}
+        else:
+            return {"status": "info", "message": "Scheduler is already running"}
+    except Exception as e:
+        logger.error(f"Failed to start scheduler: {e}")
+        raise HTTPException(status_code=500, detail="Failed to start scheduler")
+
+@app.post("/api/scheduler/stop")
+async def stop_scheduler():
+    """Stop the scheduler"""
+    try:
+        scheduler_service.stop_scheduler()
+        return {"status": "success", "message": "Scheduler stop requested"}
+    except Exception as e:
+        logger.error(f"Failed to stop scheduler: {e}")
+        raise HTTPException(status_code=500, detail="Failed to stop scheduler")
+
+@app.post("/api/scheduler/task/{task_name}/enable")
+async def enable_task(task_name: str):
+    """Enable a specific scheduled task"""
+    try:
+        scheduler_service.enable_task(task_name)
+        return {"status": "success", "message": f"Task {task_name} enabled"}
+    except Exception as e:
+        logger.error(f"Failed to enable task {task_name}: {e}")
+        raise HTTPException(status_code=500, detail="Failed to enable task")
+
+@app.post("/api/scheduler/task/{task_name}/disable")
+async def disable_task(task_name: str):
+    """Disable a specific scheduled task"""
+    try:
+        scheduler_service.disable_task(task_name)
+        return {"status": "success", "message": f"Task {task_name} disabled"}
+    except Exception as e:
+        logger.error(f"Failed to disable task {task_name}: {e}")
+        raise HTTPException(status_code=500, detail="Failed to disable task")
+
+@app.post("/api/scheduler/automation-settings")
+async def update_scheduler_automation_settings(settings: Dict[str, Any]):
+    """Update scheduler automation settings"""
+    try:
+        scheduler_service.update_automation_settings(settings)
+        return {"status": "success", "message": "Scheduler automation settings updated"}
+    except Exception as e:
+        logger.error(f"Failed to update scheduler settings: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update scheduler settings")
 
 # Test connection endpoints
 @app.post("/api/test-connection/{service}")

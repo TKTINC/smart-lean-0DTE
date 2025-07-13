@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Lean-0DTE Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Smart-Lean-0DTE</h1>
+                <span class="nav-subtitle">Autonomous Trading System</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="trading.html" class="nav-link">Trading</a>
+                <a href="analytics.html" class="nav-link active">Analytics</a>
+                <a href="settings.html" class="nav-link">Settings</a>
+            </div>
+            <div class="nav-status">
+                <span id="connection-status" class="status-indicator">●</span>
+                <span id="connection-text">Connected</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Analytics Controls -->
+            <div class="analytics-controls">
+                <div class="control-group">
+                    <label>Timeframe:</label>
+                    <select id="timeframe-select" class="control-select">
+                        <option value="1D">1 Day</option>
+                        <option value="1W">1 Week</option>
+                        <option value="1M" selected>1 Month</option>
+                        <option value="3M">3 Months</option>
+                        <option value="6M">6 Months</option>
+                        <option value="1Y">1 Year</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Strategy:</label>
+                    <select id="strategy-select" class="control-select">
+                        <option value="ALL" selected>All Strategies</option>
+                        <option value="momentum">Momentum Breakout</option>
+                        <option value="mean_reversion">Mean Reversion</option>
+                        <option value="gap_fill">Gap Fill</option>
+                        <option value="vix_spike">VIX Spike</option>
+                        <option value="earnings">Earnings Play</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Option Type:</label>
+                    <select id="option-type-select" class="control-select">
+                        <option value="ALL" selected>Calls & Puts</option>
+                        <option value="CALL">Calls Only</option>
+                        <option value="PUT">Puts Only</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="metrics-section">
+                <h2>Performance Metrics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3>Total Return</h3>
+                        <div class="metric-value">412.0%</div>
+                        <div class="metric-change positive">+156.8% Annualized</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Sharpe Ratio</h3>
+                        <div class="metric-value">2.05</div>
+                        <div class="metric-change positive">Excellent</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Max Drawdown</h3>
+                        <div class="metric-value">-3.2%</div>
+                        <div class="metric-change positive">Low Risk</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Win Rate</h3>
+                        <div class="metric-value">78.5%</div>
+                        <div class="metric-change positive">979/1247 trades</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Profit Factor</h3>
+                        <div class="metric-value">2.8</div>
+                        <div class="metric-change positive">Strong</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Calmar Ratio</h3>
+                        <div class="metric-value">15.6</div>
+                        <div class="metric-change positive">Exceptional</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call vs Put Analysis -->
+            <div class="callput-section">
+                <h2>Call vs Put Analysis</h2>
+                <div class="callput-grid">
+                    <div class="callput-stats">
+                        <h3>Call Options</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Trades:</span>
+                            <span class="stat-value">687</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Win Rate:</span>
+                            <span class="stat-value">81.2%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Return:</span>
+                            <span class="stat-value">4.1%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total P&L:</span>
+                            <span class="stat-value positive">+$28,450</span>
+                        </div>
+                    </div>
+                    <div class="callput-stats">
+                        <h3>Put Options</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Trades:</span>
+                            <span class="stat-value">560</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Win Rate:</span>
+                            <span class="stat-value">75.4%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Return:</span>
+                            <span class="stat-value">3.7%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total P&L:</span>
+                            <span class="stat-value positive">+$26,350</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <h3>Equity Curve</h3>
+                    <canvas id="equityChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Daily Returns</h3>
+                    <canvas id="returnsChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Call vs Put Performance</h3>
+                    <canvas id="callPutPerformanceChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Strategy Breakdown</h3>
+                    <canvas id="strategyBreakdownChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Monthly Returns</h3>
+                    <canvas id="monthlyReturnsChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Trade Distribution</h3>
+                    <canvas id="tradeDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Strategy Performance Table -->
+            <div class="strategy-section">
+                <h2>Strategy Performance</h2>
+                <div class="strategy-table-container">
+                    <table class="strategy-table">
+                        <thead>
+                            <tr>
+                                <th>Strategy</th>
+                                <th>Trades</th>
+                                <th>Win Rate</th>
+                                <th>Avg Return</th>
+                                <th>Total P&L</th>
+                                <th>Sharpe Ratio</th>
+                                <th>Max DD</th>
+                                <th>Best Trade</th>
+                                <th>Worst Trade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Momentum Breakout</td>
+                                <td>342</td>
+                                <td>82.5%</td>
+                                <td>3.2%</td>
+                                <td class="positive">+$18,500</td>
+                                <td>2.1</td>
+                                <td>-2.8%</td>
+                                <td class="positive">+$1,250</td>
+                                <td class="negative">-$380</td>
+                            </tr>
+                            <tr>
+                                <td>Mean Reversion</td>
+                                <td>298</td>
+                                <td>76.8%</td>
+                                <td>2.8%</td>
+                                <td class="positive">+$14,200</td>
+                                <td>1.8</td>
+                                <td>-3.1%</td>
+                                <td class="positive">+$980</td>
+                                <td class="negative">-$420</td>
+                            </tr>
+                            <tr>
+                                <td>Gap Fill</td>
+                                <td>156</td>
+                                <td>84.6%</td>
+                                <td>4.1%</td>
+                                <td class="positive">+$9,800</td>
+                                <td>2.3</td>
+                                <td>-2.2%</td>
+                                <td class="positive">+$1,450</td>
+                                <td class="negative">-$290</td>
+                            </tr>
+                            <tr>
+                                <td>VIX Spike</td>
+                                <td>89</td>
+                                <td>79.8%</td>
+                                <td>5.2%</td>
+                                <td class="positive">+$7,200</td>
+                                <td>1.9</td>
+                                <td>-4.1%</td>
+                                <td class="positive">+$2,100</td>
+                                <td class="negative">-$650</td>
+                            </tr>
+                            <tr>
+                                <td>Earnings Play</td>
+                                <td>67</td>
+                                <td>71.6%</td>
+                                <td>6.8%</td>
+                                <td class="positive">+$5,100</td>
+                                <td>1.6</td>
+                                <td>-5.8%</td>
+                                <td class="positive">+$2,850</td>
+                                <td class="negative">-$890</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- AI Model Metrics -->
+            <div class="ai-section">
+                <h2>AI Model Performance</h2>
+                <div class="ai-metrics-grid">
+                    <div class="ai-metric">
+                        <h4>Model Accuracy</h4>
+                        <div class="ai-value">84.2%</div>
+                        <div class="ai-progress">
+                            <div class="ai-progress-bar" style="width: 84.2%"></div>
+                        </div>
+                    </div>
+                    <div class="ai-metric">
+                        <h4>Prediction Confidence</h4>
+                        <div class="ai-value">78.5%</div>
+                        <div class="ai-progress">
+                            <div class="ai-progress-bar" style="width: 78.5%"></div>
+                        </div>
+                    </div>
+                    <div class="ai-metric">
+                        <h4>Adaptation Rate</h4>
+                        <div class="ai-value">92.1%</div>
+                        <div class="ai-progress">
+                            <div class="ai-progress-bar" style="width: 92.1%"></div>
+                        </div>
+                    </div>
+                    <div class="ai-metric">
+                        <h4>Signal Strength</h4>
+                        <div class="ai-value">87.3%</div>
+                        <div class="ai-progress">
+                            <div class="ai-progress-bar" style="width: 87.3%"></div>
+                        </div>
+                    </div>
+                    <div class="ai-metric">
+                        <h4>Market Regime Detection</h4>
+                        <div class="ai-value">89.6%</div>
+                        <div class="ai-progress">
+                            <div class="ai-progress-bar" style="width: 89.6%"></div>
+                        </div>
+                    </div>
+                    <div class="ai-metric">
+                        <h4>Data Quality</h4>
+                        <div class="ai-value">96.8%</div>
+                        <div class="ai-progress">
+                            <div class="ai-progress-bar" style="width: 96.8%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Analysis -->
+            <div class="risk-section">
+                <h2>Risk Analysis</h2>
+                <div class="risk-grid">
+                    <div class="risk-metric">
+                        <span class="risk-label">Value at Risk (95%)</span>
+                        <span class="risk-value">$1,250</span>
+                    </div>
+                    <div class="risk-metric">
+                        <span class="risk-label">Expected Shortfall</span>
+                        <span class="risk-value">$1,890</span>
+                    </div>
+                    <div class="risk-metric">
+                        <span class="risk-label">Beta (vs SPY)</span>
+                        <span class="risk-value">0.85</span>
+                    </div>
+                    <div class="risk-metric">
+                        <span class="risk-label">Alpha</span>
+                        <span class="risk-value positive">8.2%</span>
+                    </div>
+                    <div class="risk-metric">
+                        <span class="risk-label">Information Ratio</span>
+                        <span class="risk-value">1.92</span>
+                    </div>
+                    <div class="risk-metric">
+                        <span class="risk-label">Volatility</span>
+                        <span class="risk-value">12.3%</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize analytics page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnalytics();
+            initializeCharts();
+            setupEventListeners();
+        });
+
+        function initializeAnalytics() {
+            // Load initial data
+            loadAnalyticsData();
+        }
+
+        function initializeCharts() {
+            // Equity Curve Chart
+            const equityCtx = document.getElementById('equityChart').getContext('2d');
+            new Chart(equityCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: [10000, 15200, 22100, 31200, 39800, 51200],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        },
+                        x: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#E5E7EB' } }
+                    }
+                }
+            });
+
+            // Daily Returns Chart
+            const returnsCtx = document.getElementById('returnsChart').getContext('2d');
+            new Chart(returnsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Nov 1', 'Nov 2', 'Nov 3', 'Nov 4', 'Nov 5', 'Nov 6', 'Nov 7', 'Nov 8', 'Nov 9', 'Nov 10'],
+                    datasets: [{
+                        label: 'Daily Return %',
+                        data: [2.3, -0.8, 1.5, 3.2, -1.2, 2.8, 0.5, 1.9, -0.3, 2.1],
+                        backgroundColor: function(context) {
+                            return context.parsed.y >= 0 ? '#10B981' : '#EF4444';
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        },
+                        x: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#E5E7EB' } }
+                    }
+                }
+            });
+
+            // Call vs Put Performance Chart
+            const callPutCtx = document.getElementById('callPutPerformanceChart').getContext('2d');
+            new Chart(callPutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Call Wins', 'Call Losses', 'Put Wins', 'Put Losses'],
+                    datasets: [{
+                        data: [558, 129, 422, 138],
+                        backgroundColor: ['#10B981', '#EF4444', '#3B82F6', '#F59E0B']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#E5E7EB' } }
+                    }
+                }
+            });
+
+            // Strategy Breakdown Chart
+            const strategyCtx = document.getElementById('strategyBreakdownChart').getContext('2d');
+            new Chart(strategyCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Momentum', 'Mean Rev', 'Gap Fill', 'VIX Spike', 'Earnings'],
+                    datasets: [{
+                        label: 'Win Rate %',
+                        data: [82.5, 76.8, 84.6, 79.8, 71.6],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)'
+                    }, {
+                        label: 'Avg Return %',
+                        data: [3.2, 2.8, 4.1, 5.2, 6.8],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#E5E7EB' } }
+                    }
+                }
+            });
+
+            // Monthly Returns Chart
+            const monthlyCtx = document.getElementById('monthlyReturnsChart').getContext('2d');
+            new Chart(monthlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+                    datasets: [{
+                        label: 'Monthly Return %',
+                        data: [8.2, 12.5, -2.1, 15.8, 9.3, 18.7, 22.1, 14.6, 19.2, 11.8, 16.4],
+                        backgroundColor: function(context) {
+                            return context.parsed.y >= 0 ? '#10B981' : '#EF4444';
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        },
+                        x: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#E5E7EB' } }
+                    }
+                }
+            });
+
+            // Trade Distribution Chart
+            const distributionCtx = document.getElementById('tradeDistributionChart').getContext('2d');
+            new Chart(distributionCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['0-5% Gains', '5-10% Gains', '10-20% Gains', '20%+ Gains', 'Losses'],
+                    datasets: [{
+                        data: [156, 298, 342, 89, 267],
+                        backgroundColor: ['#10B981', '#059669', '#047857', '#065F46', '#EF4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#E5E7EB' } }
+                    }
+                }
+            });
+        }
+
+        function setupEventListeners() {
+            // Timeframe selector
+            document.getElementById('timeframe-select').addEventListener('change', function() {
+                updateAnalytics('timeframe', this.value);
+            });
+
+            // Strategy selector
+            document.getElementById('strategy-select').addEventListener('change', function() {
+                updateAnalytics('strategy', this.value);
+            });
+
+            // Option type selector
+            document.getElementById('option-type-select').addEventListener('change', function() {
+                updateAnalytics('optionType', this.value);
+            });
+        }
+
+        function loadAnalyticsData() {
+            fetch('/api/analytics')
+                .then(response => response.json())
+                .then(data => {
+                    updateAnalyticsDisplay(data);
+                })
+                .catch(error => {
+                    console.log('Using demo data - backend not connected');
+                });
+        }
+
+        function updateAnalytics(type, value) {
+            const params = new URLSearchParams();
+            params.append(type, value);
+            
+            fetch(`/api/analytics?${params}`)
+                .then(response => response.json())
+                .then(data => {
+                    updateAnalyticsDisplay(data);
+                })
+                .catch(error => {
+                    console.log('Analytics update failed');
+                });
+        }
+
+        function updateAnalyticsDisplay(data) {
+            // Update metrics and charts with new data
+            // This would be implemented based on the actual API response format
+        }
+    </script>
+</body>
+</html>
+

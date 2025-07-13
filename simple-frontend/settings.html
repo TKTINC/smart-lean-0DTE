@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Lean-0DTE Settings</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Smart-Lean-0DTE</h1>
+                <span class="nav-subtitle">Autonomous Trading System</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="trading.html" class="nav-link">Trading</a>
+                <a href="analytics.html" class="nav-link">Analytics</a>
+                <a href="settings.html" class="nav-link active">Settings</a>
+            </div>
+            <div class="nav-status">
+                <span id="connection-status" class="status-indicator">●</span>
+                <span id="connection-text">Connected</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- API Configuration -->
+            <div class="settings-section">
+                <h2>API Configuration</h2>
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Databento API</h3>
+                        <div class="setting-item">
+                            <label>API Key</label>
+                            <input type="password" id="databento-key" placeholder="Enter Databento API key" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Dataset</label>
+                            <select id="databento-dataset" class="setting-select">
+                                <option value="OPRA">OPRA (Options)</option>
+                                <option value="NASDAQ">NASDAQ</option>
+                                <option value="NYSE">NYSE</option>
+                            </select>
+                        </div>
+                        <div class="setting-status">
+                            <span class="status-indicator connected">●</span>
+                            <span>Connected</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Interactive Brokers</h3>
+                        <div class="setting-item">
+                            <label>Gateway Host</label>
+                            <input type="text" id="ibkr-host" value="localhost" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Gateway Port</label>
+                            <input type="number" id="ibkr-port" value="4001" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Client ID</label>
+                            <input type="number" id="ibkr-client-id" value="1" class="setting-input">
+                        </div>
+                        <div class="setting-status">
+                            <span class="status-indicator connected">●</span>
+                            <span>Connected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trading Parameters -->
+            <div class="settings-section">
+                <h2>Trading Parameters</h2>
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Position Sizing</h3>
+                        <div class="setting-item">
+                            <label>Account Size ($)</label>
+                            <input type="number" id="account-size" value="50000" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Max Risk Per Trade (%)</label>
+                            <input type="number" id="max-risk-per-trade" value="2.0" step="0.1" min="0.5" max="5.0" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Max Positions</label>
+                            <input type="number" id="max-positions" value="5" min="1" max="10" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Max Day Trades</label>
+                            <input type="number" id="max-day-trades" value="3" min="1" max="3" class="setting-input">
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Risk Management</h3>
+                        <div class="setting-item">
+                            <label>Stop Loss (%)</label>
+                            <input type="number" id="stop-loss" value="15" min="5" max="50" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Take Profit (%)</label>
+                            <input type="number" id="take-profit" value="25" min="10" max="100" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Max Daily Loss ($)</label>
+                            <input type="number" id="max-daily-loss" value="1000" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Trailing Stop (%)</label>
+                            <input type="number" id="trailing-stop" value="10" min="5" max="30" class="setting-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Model Settings -->
+            <div class="settings-section">
+                <h2>AI Model Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Signal Generation</h3>
+                        <div class="setting-item">
+                            <label>Minimum Confidence (%)</label>
+                            <input type="number" id="min-confidence" value="70" min="50" max="95" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Signal Timeout (minutes)</label>
+                            <input type="number" id="signal-timeout" value="30" min="5" max="120" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Model Update Frequency</label>
+                            <select id="model-update-freq" class="setting-select">
+                                <option value="realtime">Real-time</option>
+                                <option value="hourly">Hourly</option>
+                                <option value="daily" selected>Daily</option>
+                                <option value="weekly">Weekly</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Strategy Weights</h3>
+                        <div class="setting-item">
+                            <label>Momentum Breakout (%)</label>
+                            <input type="range" id="momentum-weight" min="0" max="100" value="25" class="setting-range">
+                            <span class="range-value">25%</span>
+                        </div>
+                        <div class="setting-item">
+                            <label>Mean Reversion (%)</label>
+                            <input type="range" id="mean-reversion-weight" min="0" max="100" value="20" class="setting-range">
+                            <span class="range-value">20%</span>
+                        </div>
+                        <div class="setting-item">
+                            <label>Gap Fill (%)</label>
+                            <input type="range" id="gap-fill-weight" min="0" max="100" value="20" class="setting-range">
+                            <span class="range-value">20%</span>
+                        </div>
+                        <div class="setting-item">
+                            <label>VIX Spike (%)</label>
+                            <input type="range" id="vix-spike-weight" min="0" max="100" value="20" class="setting-range">
+                            <span class="range-value">20%</span>
+                        </div>
+                        <div class="setting-item">
+                            <label>Earnings Play (%)</label>
+                            <input type="range" id="earnings-weight" min="0" max="100" value="15" class="setting-range">
+                            <span class="range-value">15%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Hours -->
+            <div class="settings-section">
+                <h2>Market Hours & Automation</h2>
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Trading Hours</h3>
+                        <div class="setting-item">
+                            <label>Market Open</label>
+                            <input type="time" id="market-open" value="09:30" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Market Close</label>
+                            <input type="time" id="market-close" value="16:00" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Pre-Market Start</label>
+                            <input type="time" id="premarket-start" value="08:00" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>After-Hours End</label>
+                            <input type="time" id="afterhours-end" value="20:00" class="setting-input">
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Automation Schedule</h3>
+                        <div class="setting-item">
+                            <label>Auto-Start Trading</label>
+                            <label class="switch">
+                                <input type="checkbox" id="auto-start" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Weekend Learning</label>
+                            <label class="switch">
+                                <input type="checkbox" id="weekend-learning" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Holiday Trading</label>
+                            <label class="switch">
+                                <input type="checkbox" id="holiday-trading">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="settings-section">
+                <h2>Notifications</h2>
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Alert Settings</h3>
+                        <div class="setting-item">
+                            <label>Email Notifications</label>
+                            <label class="switch">
+                                <input type="checkbox" id="email-notifications" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>SMS Alerts</label>
+                            <label class="switch">
+                                <input type="checkbox" id="sms-alerts">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Trade Confirmations</label>
+                            <label class="switch">
+                                <input type="checkbox" id="trade-confirmations" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Error Alerts</label>
+                            <label class="switch">
+                                <input type="checkbox" id="error-alerts" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Contact Information</h3>
+                        <div class="setting-item">
+                            <label>Email Address</label>
+                            <input type="email" id="email-address" placeholder="your@email.com" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Phone Number</label>
+                            <input type="tel" id="phone-number" placeholder="+1 (555) 123-4567" class="setting-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Settings -->
+            <div class="settings-section">
+                <h2>System Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>Performance</h3>
+                        <div class="setting-item">
+                            <label>Data Refresh Rate (seconds)</label>
+                            <input type="number" id="refresh-rate" value="5" min="1" max="60" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <label>Log Level</label>
+                            <select id="log-level" class="setting-select">
+                                <option value="DEBUG">Debug</option>
+                                <option value="INFO" selected>Info</option>
+                                <option value="WARNING">Warning</option>
+                                <option value="ERROR">Error</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Cache Duration (minutes)</label>
+                            <input type="number" id="cache-duration" value="15" min="1" max="120" class="setting-input">
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Backup & Recovery</h3>
+                        <div class="setting-item">
+                            <label>Auto Backup</label>
+                            <label class="switch">
+                                <input type="checkbox" id="auto-backup" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Backup Frequency</label>
+                            <select id="backup-frequency" class="setting-select">
+                                <option value="hourly">Hourly</option>
+                                <option value="daily" selected>Daily</option>
+                                <option value="weekly">Weekly</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Data Retention (days)</label>
+                            <input type="number" id="data-retention" value="90" min="30" max="365" class="setting-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="settings-actions">
+                <button id="save-settings" class="btn-primary">Save Settings</button>
+                <button id="reset-settings" class="btn-secondary">Reset to Defaults</button>
+                <button id="export-settings" class="btn-secondary">Export Configuration</button>
+                <button id="import-settings" class="btn-secondary">Import Configuration</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize settings page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSettings();
+            setupEventListeners();
+            loadCurrentSettings();
+        });
+
+        function initializeSettings() {
+            // Setup range sliders
+            const ranges = document.querySelectorAll('.setting-range');
+            ranges.forEach(range => {
+                const valueSpan = range.nextElementSibling;
+                range.addEventListener('input', function() {
+                    valueSpan.textContent = this.value + '%';
+                });
+            });
+        }
+
+        function setupEventListeners() {
+            // Save settings
+            document.getElementById('save-settings').addEventListener('click', saveSettings);
+            
+            // Reset settings
+            document.getElementById('reset-settings').addEventListener('click', resetSettings);
+            
+            // Export settings
+            document.getElementById('export-settings').addEventListener('click', exportSettings);
+            
+            // Import settings
+            document.getElementById('import-settings').addEventListener('click', importSettings);
+
+            // Real-time validation
+            const inputs = document.querySelectorAll('.setting-input, .setting-select');
+            inputs.forEach(input => {
+                input.addEventListener('change', validateInput);
+            });
+        }
+
+        function loadCurrentSettings() {
+            fetch('/api/settings')
+                .then(response => response.json())
+                .then(data => {
+                    populateSettings(data);
+                })
+                .catch(error => {
+                    console.log('Using default settings - backend not connected');
+                });
+        }
+
+        function populateSettings(settings) {
+            // Populate form fields with current settings
+            Object.keys(settings).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.type === 'checkbox') {
+                        element.checked = settings[key];
+                    } else {
+                        element.value = settings[key];
+                    }
+                }
+            });
+        }
+
+        function saveSettings() {
+            const settings = collectSettings();
+            
+            fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showNotification('Settings saved successfully!', 'success');
+            })
+            .catch(error => {
+                showNotification('Failed to save settings', 'error');
+            });
+        }
+
+        function resetSettings() {
+            if (confirm('Are you sure you want to reset all settings to defaults?')) {
+                fetch('/api/settings/reset', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        populateSettings(data);
+                        showNotification('Settings reset to defaults', 'success');
+                    })
+                    .catch(error => {
+                        showNotification('Failed to reset settings', 'error');
+                    });
+            }
+        }
+
+        function exportSettings() {
+            const settings = collectSettings();
+            const dataStr = JSON.stringify(settings, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'smart-lean-0dte-settings.json';
+            link.click();
+            
+            showNotification('Settings exported successfully!', 'success');
+        }
+
+        function importSettings() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const settings = JSON.parse(e.target.result);
+                            populateSettings(settings);
+                            showNotification('Settings imported successfully!', 'success');
+                        } catch (error) {
+                            showNotification('Invalid settings file', 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            
+            input.click();
+        }
+
+        function collectSettings() {
+            const settings = {};
+            const inputs = document.querySelectorAll('.setting-input, .setting-select');
+            
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    settings[input.id] = input.checked;
+                } else if (input.type === 'number' || input.type === 'range') {
+                    settings[input.id] = parseFloat(input.value);
+                } else {
+                    settings[input.id] = input.value;
+                }
+            });
+            
+            return settings;
+        }
+
+        function validateInput(event) {
+            const input = event.target;
+            let isValid = true;
+            
+            // Add validation logic based on input type
+            if (input.type === 'number') {
+                const value = parseFloat(input.value);
+                const min = parseFloat(input.min);
+                const max = parseFloat(input.max);
+                
+                if (isNaN(value) || (min && value < min) || (max && value > max)) {
+                    isValid = false;
+                }
+            }
+            
+            // Visual feedback
+            if (isValid) {
+                input.classList.remove('invalid');
+            } else {
+                input.classList.add('invalid');
+            }
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+

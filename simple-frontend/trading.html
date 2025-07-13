@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Lean-0DTE Trading</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Smart-Lean-0DTE</h1>
+                <span class="nav-subtitle">Autonomous Trading System</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="trading.html" class="nav-link active">Trading</a>
+                <a href="analytics.html" class="nav-link">Analytics</a>
+                <a href="settings.html" class="nav-link">Settings</a>
+            </div>
+            <div class="nav-status">
+                <span id="connection-status" class="status-indicator">●</span>
+                <span id="connection-text">Connected</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Emergency Controls -->
+            <div class="emergency-section">
+                <div class="emergency-controls">
+                    <button id="emergency-stop" class="emergency-btn">🛑 EMERGENCY STOP</button>
+                    <div class="master-switch">
+                        <label class="switch-label">Master Automation</label>
+                        <label class="switch">
+                            <input type="checkbox" id="master-switch" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span id="master-status" class="status-text active">ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Automation Controls -->
+            <div class="controls-section">
+                <h2>System Controls</h2>
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <h3>Trading Controls</h3>
+                        <div class="control-item">
+                            <label>Data Collection</label>
+                            <label class="switch">
+                                <input type="checkbox" id="data-collection" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="control-item">
+                            <label>Signal Generation</label>
+                            <label class="switch">
+                                <input type="checkbox" id="signal-generation" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="control-item">
+                            <label>Trade Execution</label>
+                            <label class="switch">
+                                <input type="checkbox" id="trade-execution" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="control-item">
+                            <label>Risk Management</label>
+                            <label class="switch">
+                                <input type="checkbox" id="risk-management" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <h3>Risk Parameters</h3>
+                        <div class="control-item">
+                            <label>Max Positions</label>
+                            <input type="number" id="max-positions" value="5" min="1" max="10" class="control-input">
+                        </div>
+                        <div class="control-item">
+                            <label>Max Day Trades</label>
+                            <input type="number" id="max-day-trades" value="3" min="1" max="3" class="control-input">
+                        </div>
+                        <div class="control-item">
+                            <label>Max Risk Per Trade (%)</label>
+                            <input type="number" id="max-risk" value="2.0" min="0.5" max="5.0" step="0.1" class="control-input">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <h3>Exit Parameters</h3>
+                        <div class="control-item">
+                            <label>Stop Loss (%)</label>
+                            <input type="number" id="stop-loss" value="15" min="5" max="50" class="control-input">
+                        </div>
+                        <div class="control-item">
+                            <label>Take Profit (%)</label>
+                            <input type="number" id="take-profit" value="25" min="10" max="100" class="control-input">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <h3>Market Data</h3>
+                        <div class="market-data">
+                            <div class="market-item">
+                                <span class="symbol">SPY</span>
+                                <span class="price" id="spy-price">$444.85</span>
+                                <span class="change positive" id="spy-change">+2.15 (+0.48%)</span>
+                            </div>
+                            <div class="market-item">
+                                <span class="symbol">QQQ</span>
+                                <span class="price" id="qqq-price">$380.42</span>
+                                <span class="change negative" id="qqq-change">-1.23 (-0.32%)</span>
+                            </div>
+                            <div class="market-item">
+                                <span class="symbol">IWM</span>
+                                <span class="price" id="iwm-price">$195.67</span>
+                                <span class="change positive" id="iwm-change">+0.89 (+0.46%)</span>
+                            </div>
+                            <div class="market-item">
+                                <span class="symbol">VIX</span>
+                                <span class="price" id="vix-price">$14.23</span>
+                                <span class="change negative" id="vix-change">-0.45 (-3.06%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Positions -->
+            <div class="positions-section">
+                <h2>Active Positions</h2>
+                <div class="positions-table-container">
+                    <table class="positions-table">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Type</th>
+                                <th>Strike</th>
+                                <th>Qty</th>
+                                <th>Entry</th>
+                                <th>Current</th>
+                                <th>P&L</th>
+                                <th>Stop Loss</th>
+                                <th>Take Profit</th>
+                                <th>Strategy</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="positions-tbody">
+                            <tr>
+                                <td>SPY</td>
+                                <td><span class="option-type call">CALL</span></td>
+                                <td>444</td>
+                                <td>10</td>
+                                <td>$2.45</td>
+                                <td>$2.78</td>
+                                <td class="pnl positive">+$330 (+13.5%)</td>
+                                <td>$2.08</td>
+                                <td>$3.06</td>
+                                <td>Momentum Breakout</td>
+                                <td><span class="status open">OPEN</span></td>
+                                <td><button class="close-btn">Close</button></td>
+                            </tr>
+                            <tr>
+                                <td>QQQ</td>
+                                <td><span class="option-type put">PUT</span></td>
+                                <td>380</td>
+                                <td>5</td>
+                                <td>$1.85</td>
+                                <td>$1.92</td>
+                                <td class="pnl positive">+$35 (+3.8%)</td>
+                                <td>$1.57</td>
+                                <td>$2.31</td>
+                                <td>Mean Reversion</td>
+                                <td><span class="status open">OPEN</span></td>
+                                <td><button class="close-btn">Close</button></td>
+                            </tr>
+                            <tr>
+                                <td>IWM</td>
+                                <td><span class="option-type call">CALL</span></td>
+                                <td>195</td>
+                                <td>8</td>
+                                <td>$1.20</td>
+                                <td>$1.45</td>
+                                <td class="pnl positive">+$200 (+20.8%)</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>Gap Fill</td>
+                                <td><span class="status closed">CLOSED</span></td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Trading Queue -->
+            <div class="queue-section">
+                <h2>Trading Queue</h2>
+                <div class="queue-container">
+                    <div class="queue-item">
+                        <div class="queue-info">
+                            <span class="queue-symbol">SPY</span>
+                            <span class="option-type put">PUT</span>
+                            <span class="queue-strike">443</span>
+                            <span class="queue-confidence">82% Confidence</span>
+                        </div>
+                        <div class="queue-details">
+                            <span class="queue-strategy">Reversal Signal</span>
+                            <span class="queue-price">Est. Entry: $2.15</span>
+                            <span class="queue-time">10:22:15</span>
+                        </div>
+                        <div class="queue-status">
+                            <span class="status pending">PENDING</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call/Put Performance Charts -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <h3>Call vs Put Performance</h3>
+                    <canvas id="callPutChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Strategy Performance</h3>
+                    <canvas id="strategyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Connection Status -->
+            <div class="connection-section">
+                <h2>System Status</h2>
+                <div class="connection-grid">
+                    <div class="connection-item">
+                        <span class="connection-label">Databento API</span>
+                        <span class="connection-status connected">●</span>
+                    </div>
+                    <div class="connection-item">
+                        <span class="connection-label">IBKR Gateway</span>
+                        <span class="connection-status connected">●</span>
+                    </div>
+                    <div class="connection-item">
+                        <span class="connection-label">Backend API</span>
+                        <span class="connection-status connected">●</span>
+                    </div>
+                    <div class="connection-item">
+                        <span class="connection-label">Database</span>
+                        <span class="connection-status connected">●</span>
+                    </div>
+                    <div class="connection-item">
+                        <span class="connection-label">Redis Cache</span>
+                        <span class="connection-status connected">●</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize trading page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTradingPage();
+            initializeCharts();
+            startDataRefresh();
+        });
+
+        function initializeTradingPage() {
+            // Emergency stop handler
+            document.getElementById('emergency-stop').addEventListener('click', function() {
+                if (confirm('Are you sure you want to execute an emergency stop? This will halt all trading activities.')) {
+                    emergencyStop();
+                }
+            });
+
+            // Master switch handler
+            document.getElementById('master-switch').addEventListener('change', function() {
+                toggleMasterSwitch(this.checked);
+            });
+
+            // Control switches
+            const switches = ['data-collection', 'signal-generation', 'trade-execution', 'risk-management'];
+            switches.forEach(switchId => {
+                document.getElementById(switchId).addEventListener('change', function() {
+                    updateAutomationSetting(switchId, this.checked);
+                });
+            });
+
+            // Risk parameter inputs
+            const inputs = ['max-positions', 'max-day-trades', 'max-risk', 'stop-loss', 'take-profit'];
+            inputs.forEach(inputId => {
+                document.getElementById(inputId).addEventListener('change', function() {
+                    updateRiskParameter(inputId, this.value);
+                });
+            });
+        }
+
+        function initializeCharts() {
+            // Call vs Put Performance Chart
+            const callPutCtx = document.getElementById('callPutChart').getContext('2d');
+            new Chart(callPutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['CALL Wins', 'CALL Losses', 'PUT Wins', 'PUT Losses'],
+                    datasets: [{
+                        data: [342, 89, 298, 67],
+                        backgroundColor: ['#10B981', '#EF4444', '#3B82F6', '#F59E0B']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#E5E7EB' }
+                        }
+                    }
+                }
+            });
+
+            // Strategy Performance Chart
+            const strategyCtx = document.getElementById('strategyChart').getContext('2d');
+            new Chart(strategyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Momentum', 'Mean Rev', 'Gap Fill', 'VIX Spike', 'Earnings'],
+                    datasets: [{
+                        label: 'Win Rate %',
+                        data: [82.5, 76.8, 84.6, 79.8, 71.6],
+                        backgroundColor: '#10B981'
+                    }, {
+                        label: 'Avg Return %',
+                        data: [3.2, 2.8, 4.1, 5.2, 6.8],
+                        backgroundColor: '#3B82F6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        },
+                        x: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#E5E7EB' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function emergencyStop() {
+            // Disable all automation
+            document.getElementById('master-switch').checked = false;
+            document.getElementById('master-status').textContent = 'STOPPED';
+            document.getElementById('master-status').className = 'status-text stopped';
+            
+            // Send emergency stop to backend
+            fetch('/api/trading/emergency-stop', { method: 'POST' })
+                .catch(error => console.log('Emergency stop API call failed'));
+        }
+
+        function toggleMasterSwitch(enabled) {
+            const status = document.getElementById('master-status');
+            if (enabled) {
+                status.textContent = 'ACTIVE';
+                status.className = 'status-text active';
+            } else {
+                status.textContent = 'PAUSED';
+                status.className = 'status-text paused';
+                
+                // Disable all sub-switches
+                const switches = ['data-collection', 'signal-generation', 'trade-execution', 'risk-management'];
+                switches.forEach(switchId => {
+                    document.getElementById(switchId).checked = false;
+                });
+            }
+            
+            // Send to backend
+            updateAutomationSetting('masterSwitch', enabled);
+        }
+
+        function updateAutomationSetting(setting, value) {
+            const data = { [setting]: value };
+            fetch('/api/automation/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).catch(error => console.log('Settings update failed'));
+        }
+
+        function updateRiskParameter(parameter, value) {
+            const data = { [parameter]: parseFloat(value) };
+            fetch('/api/risk/parameters', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).catch(error => console.log('Risk parameter update failed'));
+        }
+
+        function startDataRefresh() {
+            // Refresh market data every 5 seconds
+            setInterval(refreshMarketData, 5000);
+            
+            // Refresh positions every 10 seconds
+            setInterval(refreshPositions, 10000);
+        }
+
+        function refreshMarketData() {
+            fetch('/api/market/data')
+                .then(response => response.json())
+                .then(data => {
+                    // Update market data display
+                    if (data.spy) {
+                        document.getElementById('spy-price').textContent = `$${data.spy.price}`;
+                        document.getElementById('spy-change').textContent = `${data.spy.change >= 0 ? '+' : ''}${data.spy.change} (${data.spy.changePercent >= 0 ? '+' : ''}${data.spy.changePercent}%)`;
+                    }
+                })
+                .catch(error => console.log('Market data refresh failed'));
+        }
+
+        function refreshPositions() {
+            fetch('/api/positions')
+                .then(response => response.json())
+                .then(data => {
+                    // Update positions table
+                    updatePositionsTable(data);
+                })
+                .catch(error => console.log('Positions refresh failed'));
+        }
+
+        function updatePositionsTable(positions) {
+            // Update the positions table with real data
+            // This would be implemented based on the actual API response format
+        }
+    </script>
+</body>
+</html>
+

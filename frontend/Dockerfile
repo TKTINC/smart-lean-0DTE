@@ -4,24 +4,15 @@ FROM node:18-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Debug: Show what's in the build context
-RUN echo "=== Build context contents ===" && ls -la /
-
-# Copy package files with error handling
+# Copy package.json first
 COPY package.json ./
-COPY package-lock.json ./
 
-# Debug: Verify files were copied
-RUN echo "=== Files in /app after copy ===" && ls -la /app/
-
-# Install dependencies
-RUN npm ci --omit=dev
+# Install dependencies with legacy peer deps for compatibility
+# Use npm install instead of npm ci to handle version conflicts
+RUN npm install --legacy-peer-deps --only=production
 
 # Copy source code
 COPY . .
-
-# Debug: Show final structure
-RUN echo "=== Final structure ===" && ls -la /app/
 
 # Build the application
 RUN npm run build

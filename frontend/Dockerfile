@@ -5,7 +5,10 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json package-lock.json ./
+
+# Debug: List files to verify copy worked
+RUN ls -la /app/
 
 # Install dependencies
 RUN npm ci --omit=dev

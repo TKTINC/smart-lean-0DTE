@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Smart-Lean-0DTE Enhanced Local Deployment Script (macOS Compatible)
+# Smart-Lean-0DTE Enhanced Local Deployment Script
 # Intelligent, robust, and fully automated deployment with comprehensive service management
-# Version: 2.0.1-macOS
+# Version: 2.0.0
 
 set -euo pipefail  # Exit on error, undefined vars, pipe failures
 
 # Script configuration
-SCRIPT_VERSION="2.0.1-macOS"
-SCRIPT_NAME="Smart-Lean-0DTE Enhanced Deployment (macOS Compatible)"
+SCRIPT_VERSION="2.0.0"
+SCRIPT_NAME="Smart-Lean-0DTE Enhanced Deployment"
 PROJECT_NAME="smart-lean-0dte"
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -77,27 +77,54 @@ log_debug() {
     fi
 }
 
+# Progress indicator
+show_progress() {
+    local duration=$1
+    local message=$2
+    
+    if [[ "$VERBOSE" == "true" ]]; then
+        echo -e "${CYAN}$message${NC}"
+        return
+    fi
+    
+    echo -n -e "${CYAN}$message${NC}"
+    for ((i=0; i<duration; i++)); do
+        echo -n "."
+        sleep 1
+    done
+    echo " ✅"
+}
+
 # Check if command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Check if port is in use (macOS compatible)
+# Check if port is in use
 port_in_use() {
     local port=$1
     if command_exists lsof; then
         lsof -i ":$port" >/dev/null 2>&1
+    elif command_exists netstat; then
+        netstat -tuln | grep ":$port " >/dev/null 2>&1
     else
         # Fallback: try to connect
         timeout 1 bash -c "</dev/tcp/localhost/$port" >/dev/null 2>&1
     fi
 }
 
-# Get process using port (macOS compatible)
+# Get process using port
 get_port_process() {
     local port=$1
     if command_exists lsof; then
         lsof -ti ":$port" 2>/dev/null | head -1
+    elif command_exists netstat; then
+        # macOS netstat doesn't have -p flag, use different approach
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            lsof -ti ":$port" 2>/dev/null | head -1
+        else
+            netstat -tulnp 2>/dev/null | grep ":$port " | awk '{print $7}' | cut -d'/' -f1 | head -1
+        fi
     fi
 }
 
@@ -136,12 +163,20 @@ kill_process_gracefully() {
     fi
 }
 
-# Check system resources (macOS compatible)
+# Check system resources
 check_system_resources() {
     log_info "Checking system resources..."
     
-    # Check available memory (macOS)
-    if [[ "$OSTYPE" == "darwin"* ]]; then
+    # Check available memory (require at least 2GB)
+    if command_exists free; then
+        local available_mem=$(free -m | awk 'NR==2{printf "%.0f", $7}')
+        if [[ $available_mem -lt 2048 ]]; then
+            log_warning "Low available memory: ${available_mem}MB (recommended: 2GB+)"
+        else
+            log_debug "Available memory: ${available_mem}MB"
+        fi
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS memory check
         local total_mem=$(sysctl -n hw.memsize)
         local total_mem_gb=$((total_mem / 1024 / 1024 / 1024))
         if [[ $total_mem_gb -lt 4 ]]; then
@@ -149,8 +184,11 @@ check_system_resources() {
         else
             log_debug "Total memory: ${total_mem_gb}GB"
         fi
-        
-        # Check available disk space (macOS)
+    fi
+    
+    # Check available disk space (require at least 5GB)
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS disk space check
         local available_disk=$(df -g "$PROJECT_DIR" | awk 'NR==2 {print $4}')
         if [[ $available_disk -lt 5 ]]; then
             log_warning "Low disk space: ${available_disk}GB (recommended: 5GB+)"
@@ -158,16 +196,7 @@ check_system_resources() {
             log_debug "Available disk space: ${available_disk}GB"
         fi
     else
-        # Linux fallback
-        if command_exists free; then
-            local available_mem=$(free -m | awk 'NR==2{printf "%.0f", $7}')
-            if [[ $available_mem -lt 2048 ]]; then
-                log_warning "Low available memory: ${available_mem}MB (recommended: 2GB+)"
-            else
-                log_debug "Available memory: ${available_mem}MB"
-            fi
-        fi
-        
+        # Linux disk space check
         local available_disk=$(df "$PROJECT_DIR" | awk 'NR==2 {print $4}')
         local available_disk_gb=$((available_disk / 1024 / 1024))
         if [[ $available_disk_gb -lt 5 ]]; then
@@ -296,6 +325,9 @@ EOF
             log_debug "Created directory: $dir"
         fi
     done
+    
+    # Set proper permissions
+    chmod 755 deploy-local-enhanced.sh 2>/dev/null || true
     
     log_success "Environment setup complete"
 }
@@ -428,14 +460,15 @@ manage_cache_and_data() {
         fi
     done
     
-    # Clear old logs (keep last 5 files) - macOS compatible
+    # Clear old logs (keep last 5 files)
     if [[ -d "backend/logs" ]]; then
+        # macOS compatible way to keep last 5 files
         local log_files=(backend/logs/*.log)
-        if [[ ${#log_files[@]} -gt 5 ]] && [[ -f "${log_files[0]}" ]]; then
+        if [[ ${#log_files[@]} -gt 5 ]]; then
             local files_to_delete=$((${#log_files[@]} - 5))
             printf '%s\n' "${log_files[@]}" | sort | head -n "$files_to_delete" | xargs rm -f 2>/dev/null || true
-            log_debug "Cleaned old log files"
         fi
+        log_debug "Cleaned old log files"
     fi
     
     # Preserve important data volumes
@@ -456,6 +489,28 @@ install_dependencies() {
         return
     fi
     
+    # Backend dependencies
+    if [[ -f "backend/requirements.txt" ]]; then
+        log_info "Checking backend dependencies..."
+        
+        # Check if we need to rebuild backend image
+        local backend_needs_rebuild=false
+        
+        if [[ "$FORCE_REBUILD" == "true" ]]; then
+            backend_needs_rebuild=true
+        elif ! docker images | grep -q "smart-lean-0dte[_-]backend"; then
+            backend_needs_rebuild=true
+        elif [[ "backend/requirements.txt" -nt "$(docker images --format "table {{.CreatedAt}}" | grep "smart-lean-0dte[_-]backend" | head -1)" ]]; then
+            backend_needs_rebuild=true
+        fi
+        
+        if [[ "$backend_needs_rebuild" == "true" ]]; then
+            log_info "Backend dependencies need update"
+        else
+            log_debug "Backend dependencies are up to date"
+        fi
+    fi
+    
     # Frontend dependencies
     if [[ -f "frontend/package.json" ]] && command_exists node; then
         log_info "Checking frontend dependencies..."
@@ -466,17 +521,14 @@ install_dependencies() {
         if [[ ! -d "node_modules" ]] || [[ "package.json" -nt "node_modules" ]] || [[ "$FORCE_REBUILD" == "true" ]]; then
             log_info "Installing frontend dependencies..."
             
-            # Remove existing node_modules and package-lock.json for clean install
-            rm -rf node_modules package-lock.json 2>/dev/null || true
-            
-            # Use npm install with legacy peer deps for compatibility
-            if npm install --legacy-peer-deps --silent; then
-                log_success "Frontend dependencies installed"
+            # Use npm ci for faster, reliable installs in CI/production-like environments
+            if [[ -f "package-lock.json" ]]; then
+                npm ci --silent
             else
-                log_error "Failed to install frontend dependencies"
-                cd ..
-                return 1
+                npm install --silent
             fi
+            
+            log_success "Frontend dependencies installed"
         else
             log_debug "Frontend dependencies are up to date"
         fi
@@ -484,7 +536,7 @@ install_dependencies() {
         cd ..
     fi
     
-    log_success "Dependencies installation complete"
+    log_success "Dependencies check complete"
 }
 
 # =============================================================================
@@ -520,6 +572,16 @@ build_services() {
         log_error "Failed to build Docker images"
         return 1
     fi
+    
+    # Verify images were created
+    local expected_images=("smart-lean-0dte_backend" "smart-lean-0dte_frontend")
+    for image in "${expected_images[@]}"; do
+        if docker images | grep -q "$image"; then
+            log_debug "Image verified: $image"
+        else
+            log_warning "Image not found: $image"
+        fi
+    done
     
     log_success "Service build complete"
 }
@@ -665,6 +727,17 @@ perform_health_checks() {
         
         if curl -s --max-time 10 "$url" >/dev/null 2>&1; then
             log_success "$name is healthy"
+            
+            # Additional checks for backend
+            if [[ "$name" == "Backend API" ]]; then
+                local health_response=$(curl -s "$url" 2>/dev/null || echo "{}")
+                if echo "$health_response" | grep -q '"status":"healthy"'; then
+                    log_debug "Backend health check passed"
+                else
+                    log_warning "Backend health check returned unexpected response"
+                    health_status=1
+                fi
+            fi
         else
             log_error "$name health check failed"
             health_status=1
@@ -689,6 +762,22 @@ perform_health_checks() {
         health_status=1
     fi
     
+    # Port availability check
+    local expected_ports=($BACKEND_PORT $FRONTEND_PORT $POSTGRES_PORT $REDIS_PORT)
+    local port_names=("Backend" "Frontend" "PostgreSQL" "Redis")
+    
+    for i in "${!expected_ports[@]}"; do
+        local port=${expected_ports[$i]}
+        local name=${port_names[$i]}
+        
+        if port_in_use "$port"; then
+            log_success "$name is listening on port $port"
+        else
+            log_error "$name is not listening on port $port"
+            health_status=1
+        fi
+    done
+    
     if [[ $health_status -eq 0 ]]; then
         log_success "All health checks passed"
     else
@@ -699,19 +788,86 @@ perform_health_checks() {
 }
 
 # =============================================================================
+# REPORTING AND CLEANUP
+# =============================================================================
+
+generate_deployment_report() {
+    log_info "Generating deployment report..."
+    
+    local report_file="${PROJECT_DIR}/deployment-report-$(date +%Y%m%d-%H%M%S).txt"
+    
+    cat > "$report_file" << EOF
+# Smart-Lean-0DTE Deployment Report
+Generated: $(date)
+Script Version: $SCRIPT_VERSION
+
+## Configuration
+- Project Directory: $PROJECT_DIR
+- Force Rebuild: $FORCE_REBUILD
+- Skip Cache Clear: $SKIP_CACHE_CLEAR
+- Parallel Build: $PARALLEL_BUILD
+- Health Check Timeout: ${HEALTH_CHECK_TIMEOUT}s
+
+## Service Endpoints
+- Backend API: http://localhost:$BACKEND_PORT
+- Frontend: http://localhost:$FRONTEND_PORT
+- PostgreSQL: localhost:$POSTGRES_PORT
+- Redis: localhost:$REDIS_PORT
+
+## Health Check URLs
+- API Health: http://localhost:$BACKEND_PORT/health
+- API Documentation: http://localhost:$BACKEND_PORT/docs
+- Frontend Application: http://localhost:$FRONTEND_PORT
+
+## Docker Containers
+$(docker-compose ps 2>/dev/null || echo "Docker Compose not available")
+
+## System Resources
+$(if command_exists free; then free -h; fi)
+$(df -h "$PROJECT_DIR" 2>/dev/null || echo "Disk usage not available")
+
+## Useful Commands
+- View logs: docker-compose logs -f
+- Stop services: docker-compose down
+- Restart services: docker-compose restart
+- Shell access: docker-compose exec backend bash
+- Frontend shell: docker-compose exec frontend sh
+
+## Troubleshooting
+- Check service logs: docker-compose logs [service_name]
+- Restart specific service: docker-compose restart [service_name]
+- Rebuild specific service: docker-compose build [service_name]
+- Full cleanup: docker-compose down -v && docker system prune -f
+
+EOF
+    
+    log_success "Deployment report saved to: $report_file"
+}
+
+cleanup_temporary_files() {
+    log_debug "Cleaning up temporary files..."
+    
+    local temp_files=(".detected_services.tmp" "*.tmp")
+    for pattern in "${temp_files[@]}"; do
+        rm -f $pattern 2>/dev/null || true
+    done
+    
+    log_debug "Temporary files cleaned up"
+}
+
+# =============================================================================
 # MAIN EXECUTION FLOW
 # =============================================================================
 
 show_banner() {
     echo -e "${BOLD}${BLUE}"
     echo "╔══════════════════════════════════════════════════════════════════════════════╗"
-    echo "║                Smart-Lean-0DTE Enhanced Deployment (macOS)                  ║"
-    echo "║                                Version $SCRIPT_VERSION                             ║"
+    echo "║                     Smart-Lean-0DTE Enhanced Deployment                     ║"
+    echo "║                                Version $SCRIPT_VERSION                                ║"
     echo "╚══════════════════════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
     echo -e "${CYAN}🚀 Intelligent, robust, and fully automated deployment${NC}"
     echo -e "${CYAN}💰 Maintaining 89-90% cost optimization with enterprise features${NC}"
-    echo -e "${CYAN}🍎 Optimized for macOS compatibility${NC}"
     echo ""
 }
 
@@ -826,6 +982,10 @@ main() {
     # Validation
     perform_health_checks
     
+    # Reporting
+    generate_deployment_report
+    cleanup_temporary_files
+    
     # Success message
     echo ""
     echo -e "${GREEN}${BOLD}🎉 Smart-Lean-0DTE Deployment Complete!${NC}"
@@ -858,7 +1018,7 @@ main() {
 }
 
 # Error handling
-trap 'log_error "Deployment failed at line $LINENO. Check $LOG_FILE for details."; exit 1' ERR
+trap 'log_error "Deployment failed at line $LINENO. Check $LOG_FILE for details."; cleanup_temporary_files; exit 1' ERR
 
 # Execute main function
 main "$@"

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Lean-0DTE Signals</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Smart-Lean-0DTE</h1>
+                <span class="nav-subtitle">Autonomous Trading System</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="trading.html" class="nav-link">Trading</a>
+                <a href="analytics.html" class="nav-link">Analytics</a>
+                <a href="signals.html" class="nav-link active">Signals</a>
+                <a href="strikes.html" class="nav-link">Strikes</a>
+                <a href="settings.html" class="nav-link">Settings</a>
+            </div>
+            <div class="nav-status">
+                <span id="connection-status" class="status-indicator">●</span>
+                <span id="connection-text">Connected</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Signal Generation Status -->
+            <div class="signal-status-section">
+                <h2>Signal Generation Status</h2>
+                <div class="signal-status-grid">
+                    <div class="status-card">
+                        <h3>Active Signals</h3>
+                        <div class="status-value" id="active-signals">3</div>
+                        <div class="status-change">2 new in last hour</div>
+                    </div>
+                    <div class="status-card">
+                        <h3>Signal Accuracy</h3>
+                        <div class="status-value" id="signal-accuracy">84.2%</div>
+                        <div class="status-change positive">+2.1% this week</div>
+                    </div>
+                    <div class="status-card">
+                        <h3>Avg Confidence</h3>
+                        <div class="status-value" id="avg-confidence">78.5%</div>
+                        <div class="status-change">Above threshold</div>
+                    </div>
+                    <div class="status-card">
+                        <h3>Signals Today</h3>
+                        <div class="status-value" id="signals-today">12</div>
+                        <div class="status-change">8 executed, 4 pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signal Filters -->
+            <div class="signal-filters">
+                <div class="filter-group">
+                    <label>Symbol:</label>
+                    <select id="symbol-filter" class="filter-select">
+                        <option value="ALL" selected>All Symbols</option>
+                        <option value="SPY">SPY</option>
+                        <option value="QQQ">QQQ</option>
+                        <option value="IWM">IWM</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Strategy:</label>
+                    <select id="strategy-filter" class="filter-select">
+                        <option value="ALL" selected>All Strategies</option>
+                        <option value="momentum">Momentum Breakout</option>
+                        <option value="mean_reversion">Mean Reversion</option>
+                        <option value="gap_fill">Gap Fill</option>
+                        <option value="vix_spike">VIX Spike</option>
+                        <option value="earnings">Earnings Play</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Option Type:</label>
+                    <select id="option-filter" class="filter-select">
+                        <option value="ALL" selected>Calls & Puts</option>
+                        <option value="CALL">Calls Only</option>
+                        <option value="PUT">Puts Only</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Min Confidence:</label>
+                    <input type="range" id="confidence-filter" min="50" max="95" value="70" class="filter-range">
+                    <span id="confidence-value">70%</span>
+                </div>
+                <div class="filter-group">
+                    <label>Time Range:</label>
+                    <select id="time-filter" class="filter-select">
+                        <option value="1H">Last Hour</option>
+                        <option value="4H">Last 4 Hours</option>
+                        <option value="1D" selected>Today</option>
+                        <option value="3D">Last 3 Days</option>
+                        <option value="1W">This Week</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Real-time Signals -->
+            <div class="realtime-signals-section">
+                <h2>Real-time Signals</h2>
+                <div class="signals-container">
+                    <div class="signal-item high-confidence">
+                        <div class="signal-header">
+                            <div class="signal-symbol">SPY</div>
+                            <div class="signal-type call">CALL</div>
+                            <div class="signal-strike">445</div>
+                            <div class="signal-confidence">89%</div>
+                            <div class="signal-time">14:23:15</div>
+                        </div>
+                        <div class="signal-details">
+                            <div class="signal-strategy">Momentum Breakout</div>
+                            <div class="signal-price">Entry: $2.35 | Target: $2.94</div>
+                            <div class="signal-indicators">
+                                <span class="indicator">RSI: 72</span>
+                                <span class="indicator">Volume: +180%</span>
+                                <span class="indicator">Delta: 0.65</span>
+                            </div>
+                        </div>
+                        <div class="signal-actions">
+                            <button class="signal-btn execute">Execute</button>
+                            <button class="signal-btn ignore">Ignore</button>
+                        </div>
+                    </div>
+
+                    <div class="signal-item medium-confidence">
+                        <div class="signal-header">
+                            <div class="signal-symbol">QQQ</div>
+                            <div class="signal-type put">PUT</div>
+                            <div class="signal-strike">380</div>
+                            <div class="signal-confidence">76%</div>
+                            <div class="signal-time">14:18:42</div>
+                        </div>
+                        <div class="signal-details">
+                            <div class="signal-strategy">Mean Reversion</div>
+                            <div class="signal-price">Entry: $1.85 | Target: $2.31</div>
+                            <div class="signal-indicators">
+                                <span class="indicator">RSI: 28</span>
+                                <span class="indicator">Support: $379.50</span>
+                                <span class="indicator">IV: 22%</span>
+                            </div>
+                        </div>
+                        <div class="signal-actions">
+                            <button class="signal-btn execute">Execute</button>
+                            <button class="signal-btn ignore">Ignore</button>
+                        </div>
+                    </div>
+
+                    <div class="signal-item low-confidence">
+                        <div class="signal-header">
+                            <div class="signal-symbol">IWM</div>
+                            <div class="signal-type call">CALL</div>
+                            <div class="signal-strike">196</div>
+                            <div class="signal-confidence">72%</div>
+                            <div class="signal-time">14:15:28</div>
+                        </div>
+                        <div class="signal-details">
+                            <div class="signal-strategy">Gap Fill</div>
+                            <div class="signal-price">Entry: $1.20 | Target: $1.50</div>
+                            <div class="signal-indicators">
+                                <span class="indicator">Gap: $1.25</span>
+                                <span class="indicator">Volume: Normal</span>
+                                <span class="indicator">Theta: -0.08</span>
+                            </div>
+                        </div>
+                        <div class="signal-actions">
+                            <button class="signal-btn execute">Execute</button>
+                            <button class="signal-btn ignore">Ignore</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signal Performance Chart -->
+            <div class="signal-charts-section">
+                <div class="chart-container">
+                    <h3>Signal Generation Rate</h3>
+                    <canvas id="signalRateChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Signal Accuracy by Strategy</h3>
+                    <canvas id="signalAccuracyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Historical Signals -->
+            <div class="historical-signals-section">
+                <h2>Historical Signals</h2>
+                <div class="historical-table-container">
+                    <table class="historical-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Symbol</th>
+                                <th>Type</th>
+                                <th>Strike</th>
+                                <th>Strategy</th>
+                                <th>Confidence</th>
+                                <th>Entry Price</th>
+                                <th>Exit Price</th>
+                                <th>P&L</th>
+                                <th>Outcome</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="signal-success">
+                                <td>13:45:12</td>
+                                <td>SPY</td>
+                                <td><span class="option-type call">CALL</span></td>
+                                <td>444</td>
+                                <td>Momentum</td>
+                                <td>85%</td>
+                                <td>$2.45</td>
+                                <td>$2.78</td>
+                                <td class="positive">+$330</td>
+                                <td><span class="outcome success">SUCCESS</span></td>
+                            </tr>
+                            <tr class="signal-success">
+                                <td>13:22:35</td>
+                                <td>QQQ</td>
+                                <td><span class="option-type put">PUT</span></td>
+                                <td>381</td>
+                                <td>Mean Rev</td>
+                                <td>78%</td>
+                                <td>$1.95</td>
+                                <td>$2.15</td>
+                                <td class="positive">+$100</td>
+                                <td><span class="outcome success">SUCCESS</span></td>
+                            </tr>
+                            <tr class="signal-failure">
+                                <td>12:58:18</td>
+                                <td>IWM</td>
+                                <td><span class="option-type call">CALL</span></td>
+                                <td>195</td>
+                                <td>Gap Fill</td>
+                                <td>71%</td>
+                                <td>$1.30</td>
+                                <td>$1.10</td>
+                                <td class="negative">-$160</td>
+                                <td><span class="outcome failure">FAILURE</span></td>
+                            </tr>
+                            <tr class="signal-success">
+                                <td>12:35:42</td>
+                                <td>SPY</td>
+                                <td><span class="option-type put">PUT</span></td>
+                                <td>443</td>
+                                <td>VIX Spike</td>
+                                <td>82%</td>
+                                <td>$2.15</td>
+                                <td>$2.65</td>
+                                <td class="positive">+$250</td>
+                                <td><span class="outcome success">SUCCESS</span></td>
+                            </tr>
+                            <tr class="signal-pending">
+                                <td>12:15:28</td>
+                                <td>QQQ</td>
+                                <td><span class="option-type call">CALL</span></td>
+                                <td>382</td>
+                                <td>Earnings</td>
+                                <td>74%</td>
+                                <td>$1.85</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="outcome pending">PENDING</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Signal Statistics -->
+            <div class="signal-stats-section">
+                <h2>Signal Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-group">
+                        <h3>By Strategy</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Momentum Breakout:</span>
+                            <span class="stat-value">87.2% (156/179)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Mean Reversion:</span>
+                            <span class="stat-value">82.1% (142/173)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Gap Fill:</span>
+                            <span class="stat-value">79.8% (95/119)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">VIX Spike:</span>
+                            <span class="stat-value">85.4% (76/89)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Earnings Play:</span>
+                            <span class="stat-value">74.2% (49/66)</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-group">
+                        <h3>By Option Type</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Call Options:</span>
+                            <span class="stat-value">84.6% (312/369)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Put Options:</span>
+                            <span class="stat-value">81.2% (206/254)</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-group">
+                        <h3>By Confidence Level</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">90%+ Confidence:</span>
+                            <span class="stat-value">94.1% (48/51)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">80-89% Confidence:</span>
+                            <span class="stat-value">87.3% (189/216)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">70-79% Confidence:</span>
+                            <span class="stat-value">78.9% (281/356)</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-group">
+                        <h3>Performance Metrics</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Signal P&L:</span>
+                            <span class="stat-value positive">+$185</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Best Signal:</span>
+                            <span class="stat-value positive">+$2,850</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Worst Signal:</span>
+                            <span class="stat-value negative">-$890</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Signal Sharpe:</span>
+                            <span class="stat-value">2.34</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize signals page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSignalsPage();
+            initializeCharts();
+            setupFilters();
+            startRealTimeUpdates();
+        });
+
+        function initializeSignalsPage() {
+            // Setup confidence filter
+            const confidenceFilter = document.getElementById('confidence-filter');
+            const confidenceValue = document.getElementById('confidence-value');
+            
+            confidenceFilter.addEventListener('input', function() {
+                confidenceValue.textContent = this.value + '%';
+                filterSignals();
+            });
+
+            // Setup signal action buttons
+            const executeButtons = document.querySelectorAll('.signal-btn.execute');
+            const ignoreButtons = document.querySelectorAll('.signal-btn.ignore');
+            
+            executeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    executeSignal(this.closest('.signal-item'));
+                });
+            });
+            
+            ignoreButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    ignoreSignal(this.closest('.signal-item'));
+                });
+            });
+        }
+
+        function initializeCharts() {
+            // Signal Generation Rate Chart
+            const rateCtx = document.getElementById('signalRateChart').getContext('2d');
+            new Chart(rateCtx, {
+                type: 'line',
+                data: {
+                    labels: ['9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30'],
+                    datasets: [{
+                        label: 'Signals Generated',
+                        data: [2, 5, 3, 8, 4, 6, 7, 9, 5, 8, 3],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        },
+                        x: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#E5E7EB' } }
+                    }
+                }
+            });
+
+            // Signal Accuracy Chart
+            const accuracyCtx = document.getElementById('signalAccuracyChart').getContext('2d');
+            new Chart(accuracyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Momentum', 'Mean Rev', 'Gap Fill', 'VIX Spike', 'Earnings'],
+                    datasets: [{
+                        label: 'Accuracy %',
+                        data: [87.2, 82.1, 79.8, 85.4, 74.2],
+                        backgroundColor: ['#10B981', '#059669', '#047857', '#065F46', '#34D399']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' },
+                            min: 70,
+                            max: 90
+                        },
+                        x: { 
+                            ticks: { color: '#E5E7EB' },
+                            grid: { color: '#374151' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#E5E7EB' } }
+                    }
+                }
+            });
+        }
+
+        function setupFilters() {
+            const filters = ['symbol-filter', 'strategy-filter', 'option-filter', 'time-filter'];
+            filters.forEach(filterId => {
+                document.getElementById(filterId).addEventListener('change', filterSignals);
+            });
+        }
+
+        function filterSignals() {
+            // Implement signal filtering logic
+            const symbolFilter = document.getElementById('symbol-filter').value;
+            const strategyFilter = document.getElementById('strategy-filter').value;
+            const optionFilter = document.getElementById('option-filter').value;
+            const confidenceFilter = document.getElementById('confidence-filter').value;
+            const timeFilter = document.getElementById('time-filter').value;
+
+            // Apply filters to signal display
+            console.log('Filtering signals:', { symbolFilter, strategyFilter, optionFilter, confidenceFilter, timeFilter });
+        }
+
+        function executeSignal(signalElement) {
+            const symbol = signalElement.querySelector('.signal-symbol').textContent;
+            const type = signalElement.querySelector('.signal-type').textContent;
+            const strike = signalElement.querySelector('.signal-strike').textContent;
+            
+            if (confirm(`Execute ${type} signal for ${symbol} ${strike}?`)) {
+                // Send execution request to backend
+                fetch('/api/signals/execute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symbol, type, strike })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    signalElement.style.opacity = '0.5';
+                    signalElement.querySelector('.signal-actions').innerHTML = '<span class="executed">EXECUTED</span>';
+                })
+                .catch(error => console.log('Signal execution failed'));
+            }
+        }
+
+        function ignoreSignal(signalElement) {
+            signalElement.style.opacity = '0.3';
+            signalElement.querySelector('.signal-actions').innerHTML = '<span class="ignored">IGNORED</span>';
+        }
+
+        function startRealTimeUpdates() {
+            // Refresh signals every 10 seconds
+            setInterval(refreshSignals, 10000);
+            
+            // Update signal statistics every 30 seconds
+            setInterval(updateSignalStats, 30000);
+        }
+
+        function refreshSignals() {
+            fetch('/api/signals/realtime')
+                .then(response => response.json())
+                .then(data => {
+                    updateSignalsDisplay(data);
+                })
+                .catch(error => console.log('Signal refresh failed'));
+        }
+
+        function updateSignalStats() {
+            fetch('/api/signals/statistics')
+                .then(response => response.json())
+                .then(data => {
+                    updateStatsDisplay(data);
+                })
+                .catch(error => console.log('Stats update failed'));
+        }
+
+        function updateSignalsDisplay(signals) {
+            // Update the real-time signals display
+            // This would be implemented based on the actual API response format
+        }
+
+        function updateStatsDisplay(stats) {
+            // Update the signal statistics
+            // This would be implemented based on the actual API response format
+        }
+    </script>
+</body>
+</html>
+

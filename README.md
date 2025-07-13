@@ -77,6 +77,7 @@ Key configuration files:
 
 - [Complete Implementation Guide](docs/Smart-0DTE-Lean-System-Complete-Guide.md) - 50+ page comprehensive guide
 - [Cost Optimization Analysis](docs/modular-cost-optimization-analysis.md) - Detailed cost breakdown
+- [Three Implementation Comparison](docs/Three-Implementation-Comparison.md) - Single-Page vs Lean vs Modular
 - [Deployment Guide](docs/Smart-0DTE-Lean-System-Complete-Guide.md#implementation-guide) - Step-by-step instructions
 
 ## 🎯 **Target Users**

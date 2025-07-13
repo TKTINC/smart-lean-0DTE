@@ -129,8 +129,8 @@ services:
   # Lean Frontend (Optional for local development)
   frontend-lean:
     build:
-      context: ./smart-0dte-frontend
-      dockerfile: Dockerfile.lean
+      context: ./frontend
+      dockerfile: Dockerfile
       args:
         - REACT_APP_API_URL=http://localhost:8001
         - REACT_APP_ENVIRONMENT=lean-development
@@ -141,9 +141,6 @@ services:
       - REACT_APP_API_URL=http://localhost:8001
       - REACT_APP_ENVIRONMENT=lean-development
       - GENERATE_SOURCEMAP=false  # Reduce build size
-    volumes:
-      - ./smart-0dte-frontend/src:/app/src:ro
-      - ./smart-0dte-frontend/public:/app/public:ro
     depends_on:
       - backend-lean
     restart: unless-stopped

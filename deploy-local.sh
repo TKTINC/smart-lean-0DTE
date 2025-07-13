@@ -355,7 +355,12 @@ detect_running_services() {
     fi
     
     # Store detected services for later use
-    printf '%s\n' "${services[@]}" > .detected_services.tmp
+    if [[ ${#services[@]} -gt 0 ]]; then
+        printf '%s\n' "${services[@]}" > .detected_services.tmp
+    else
+        # Create empty file if no services
+        touch .detected_services.tmp
+    fi
 }
 
 stop_existing_services() {

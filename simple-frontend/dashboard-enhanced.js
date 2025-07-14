@@ -364,3 +364,305 @@ window.dashboardFunctions = {
     checkConnectionStatus
 };
 
+
+// Trading Mode Management
+let currentTradingMode = 'paper';
+
+async function switchTradingMode(mode) {
+    try {
+        // Show loading state
+        const modeCard = document.querySelector('.trading-mode-card');
+        modeCard.classList.add('mode-switching');
+        
+        // Update UI immediately for responsiveness
+        updateModeUI(mode);
+        
+        // Call API to switch mode
+        const response = await fetch('/api/trading-mode/switch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ mode: mode })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to switch mode: ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            currentTradingMode = mode;
+            
+            // Update UI with server response
+            updateModeUI(mode, result.new_status);
+            
+            // Show success animation
+            modeCard.classList.add('mode-switch-success');
+            setTimeout(() => {
+                modeCard.classList.remove('mode-switch-success');
+            }, 500);
+            
+            // Show notification
+            showNotification(`Successfully switched to ${mode.toUpperCase()} trading`, 'success');
+            
+            // Refresh dashboard data for new mode
+            await loadDashboardData();
+            
+        } else {
+            throw new Error(result.message || 'Failed to switch trading mode');
+        }
+        
+    } catch (error) {
+        console.error('Error switching trading mode:', error);
+        
+        // Revert UI to previous mode
+        updateModeUI(currentTradingMode);
+        
+        showNotification(`Failed to switch to ${mode} mode: ${error.message}`, 'error');
+        
+    } finally {
+        // Remove loading state
+        const modeCard = document.querySelector('.trading-mode-card');
+        modeCard.classList.remove('mode-switching');
+    }
+}
+
+function updateModeUI(mode, statusData = null) {
+    // Update mode indicator
+    const modeIndicator = document.getElementById('tradingModeIndicator');
+    const currentModeSpan = document.getElementById('currentMode');
+    
+    if (modeIndicator && currentModeSpan) {
+        modeIndicator.setAttribute('data-mode', mode);
+        currentModeSpan.textContent = mode.toUpperCase();
+    }
+    
+    // Update buttons
+    const paperBtn = document.getElementById('paperModeBtn');
+    const liveBtn = document.getElementById('liveModeBtn');
+    
+    if (paperBtn && liveBtn) {
+        paperBtn.classList.toggle('active', mode === 'paper');
+        liveBtn.classList.toggle('active', mode === 'live');
+    }
+    
+    // Update account balance and session info if provided
+    if (statusData) {
+        const accountBalance = document.getElementById('accountBalance');
+        const sessionInfo = document.getElementById('sessionInfo');
+        
+        if (accountBalance) {
+            accountBalance.textContent = `$${statusData.account_balance.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}`;
+        }
+        
+        if (sessionInfo) {
+            sessionInfo.textContent = statusData.current_session_id ? 'Active' : 'Inactive';
+        }
+    }
+}
+
+async function loadTradingModeStatus() {
+    try {
+        const response = await fetch('/api/trading-mode/status');
+        
+        if (!response.ok) {
+            throw new Error(`Failed to load trading mode status: ${response.statusText}`);
+        }
+        
+        const status = await response.json();
+        
+        currentTradingMode = status.current_mode;
+        updateModeUI(status.current_mode, status);
+        
+        return status;
+        
+    } catch (error) {
+        console.error('Error loading trading mode status:', error);
+        return null;
+    }
+}
+
+async function loadModeSpecificAnalytics(mode = null) {
+    try {
+        const targetMode = mode || currentTradingMode;
+        const response = await fetch(`/api/trading-mode/analytics?mode=${targetMode}&days=30`);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to load analytics: ${response.statusText}`);
+        }
+        
+        const analytics = await response.json();
+        return analytics;
+        
+    } catch (error) {
+        console.error('Error loading mode-specific analytics:', error);
+        return null;
+    }
+}
+
+async function loadModeComparison() {
+    try {
+        const response = await fetch('/api/trading-mode/analytics/comparison?days=30');
+        
+        if (!response.ok) {
+            throw new Error(`Failed to load mode comparison: ${response.statusText}`);
+        }
+        
+        const comparison = await response.json();
+        return comparison;
+        
+    } catch (error) {
+        console.error('Error loading mode comparison:', error);
+        return null;
+    }
+}
+
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()">×</button>
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Enhanced dashboard data loading with mode awareness
+async function loadDashboardData() {
+    try {
+        // Load trading mode status first
+        await loadTradingModeStatus();
+        
+        // Load mode-specific analytics
+        const analytics = await loadModeSpecificAnalytics();
+        
+        if (analytics) {
+            // Update dashboard with mode-specific data
+            updateDashboardMetrics(analytics);
+        }
+        
+        // Load other dashboard data...
+        await Promise.all([
+            updateConnectionStatus(),
+            loadPortfolioData(),
+            loadRecentSignals(),
+            loadMarketStatus()
+        ]);
+        
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
+    }
+}
+
+function updateDashboardMetrics(analytics) {
+    // Update portfolio value
+    const portfolioValue = document.querySelector('[data-metric="portfolio-value"]');
+    if (portfolioValue) {
+        portfolioValue.textContent = `$${analytics.current_portfolio_value.toLocaleString()}`;
+    }
+    
+    // Update total P&L
+    const totalPnL = document.querySelector('[data-metric="total-pnl"]');
+    if (totalPnL) {
+        totalPnL.textContent = `$${analytics.total_pnl.toLocaleString()}`;
+        totalPnL.className = analytics.total_pnl >= 0 ? 'positive' : 'negative';
+    }
+    
+    // Update win rate
+    const winRate = document.querySelector('[data-metric="win-rate"]');
+    if (winRate) {
+        winRate.textContent = `${analytics.win_rate.toFixed(1)}%`;
+    }
+    
+    // Update trade count
+    const tradeCount = document.querySelector('[data-metric="trade-count"]');
+    if (tradeCount) {
+        tradeCount.textContent = analytics.total_trades.toString();
+    }
+}
+
+// Initialize trading mode functionality when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Load initial trading mode status
+    loadTradingModeStatus();
+    
+    // Set up periodic updates
+    setInterval(loadTradingModeStatus, 30000); // Update every 30 seconds
+});
+
+// Add CSS for notifications
+const notificationStyles = `
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 300px;
+    animation: slideIn 0.3s ease;
+}
+
+.notification-success {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.notification-error {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+
+.notification-info {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.notification button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+`;
+
+// Add notification styles to page
+const styleSheet = document.createElement('style');
+styleSheet.textContent = notificationStyles;
+document.head.appendChild(styleSheet);
+

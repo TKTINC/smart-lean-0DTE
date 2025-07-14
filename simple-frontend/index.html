@@ -31,6 +31,34 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Trading Mode Controls -->
+            <div class="trading-mode-section">
+                <h2>Trading Mode</h2>
+                <div class="trading-mode-card">
+                    <div class="mode-indicator" id="tradingModeIndicator">
+                        <span id="currentMode">PAPER</span>
+                    </div>
+                    <div class="trading-mode-controls">
+                        <button id="paperModeBtn" class="mode-btn active" onclick="switchTradingMode('paper')">
+                            📝 Paper Trading
+                        </button>
+                        <button id="liveModeBtn" class="mode-btn" onclick="switchTradingMode('live')">
+                            💰 Live Trading
+                        </button>
+                    </div>
+                    <div class="mode-info">
+                        <div class="info-item">
+                            <span class="label">Account Balance:</span>
+                            <span id="accountBalance">$100,000.00</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Session:</span>
+                            <span id="sessionInfo">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- System Status Cards -->
             <!-- Market Status -->
             <div class="market-status-section">

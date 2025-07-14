@@ -1978,3 +1978,183 @@ input:checked + .slider:before {
     }
 }
 
+
+/* Connection Status and Data Reset Styles */
+.data-reset-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #1f2937;
+    border-radius: 8px;
+    border-left: 4px solid #f59e0b;
+}
+
+.data-reset-section h3 {
+    color: #e5e7eb;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+}
+
+.reset-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.reset-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.reset-btn.warning {
+    background: #f59e0b;
+    color: #1f2937;
+}
+
+.reset-btn.warning:hover {
+    background: #d97706;
+    transform: translateY(-1px);
+}
+
+.reset-btn.danger {
+    background: #ef4444;
+    color: white;
+}
+
+.reset-btn.danger:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+.reset-warning {
+    padding: 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    border-radius: 4px;
+}
+
+.reset-warning p {
+    color: #fca5a5;
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+/* Enhanced Status Grid */
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.status-item {
+    background: #374151;
+    padding: 1rem;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.status-item:hover {
+    background: #4b5563;
+    transform: translateY(-2px);
+}
+
+.status-label {
+    color: #9ca3af;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.status-value {
+    color: #e5e7eb;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.status-indicator {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.status-indicator.active {
+    color: #10b981;
+}
+
+.status-indicator.warning {
+    color: #f59e0b;
+}
+
+.status-indicator.error {
+    color: #ef4444;
+}
+
+.status-indicator.inactive {
+    color: #6b7280;
+}
+
+/* Connection Status Animations */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.status-indicator.connecting {
+    animation: pulse 1.5s infinite;
+    color: #f59e0b;
+}
+
+.status-indicator.reconnecting {
+    animation: pulse 1s infinite;
+    color: #ef4444;
+}
+
+/* Responsive adjustments for status section */
+@media (max-width: 768px) {
+    .status-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .reset-controls {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .reset-btn {
+        width: 100%;
+        padding: 1rem;
+    }
+    
+    .data-reset-section {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .status-item {
+        padding: 0.75rem;
+    }
+    
+    .status-label {
+        font-size: 0.6875rem;
+    }
+    
+    .status-value {
+        font-size: 0.8125rem;
+    }
+}
+

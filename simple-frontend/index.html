@@ -32,30 +32,56 @@
         <!-- Main Content -->
         <main class="main-content">
             <!-- System Status Cards -->
-            <div class="status-grid">
-                <div class="status-card">
-                    <h3>Portfolio Value</h3>
-                    <div class="status-value" id="portfolio-value">$0.00</div>
-                    <div class="status-change" id="portfolio-change">+0.00%</div>
+            <!-- Market Status -->
+            <div class="market-status-section">
+                <h2>Market & System Status</h2>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-label">Market Hours</div>
+                        <div class="status-value" id="market-hours">Pre-Market</div>
+                        <div class="status-indicator" id="market-indicator">●</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">System Status</div>
+                        <div class="status-value" id="system-status">Active</div>
+                        <div class="status-indicator active" id="system-indicator">●</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Databento Feed</div>
+                        <div class="status-value" id="databento-status">Connected</div>
+                        <div class="status-indicator active" id="databento-indicator">●</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">IBKR Gateway</div>
+                        <div class="status-value" id="ibkr-status">Connected</div>
+                        <div class="status-indicator active" id="ibkr-indicator">●</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">AI Engine</div>
+                        <div class="status-value" id="ai-status">Learning</div>
+                        <div class="status-indicator active" id="ai-indicator">●</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Last Update</div>
+                        <div class="status-value" id="last-update">14:23:45</div>
+                        <div class="status-indicator active" id="update-indicator">●</div>
+                    </div>
                 </div>
-                <div class="status-card">
-                    <h3>Daily P&L</h3>
-                    <div class="status-value" id="daily-pnl">$0.00</div>
-                    <div class="status-change" id="daily-change">+0.00%</div>
-                </div>
-                <div class="status-card">
-                    <h3>Active Positions</h3>
-                    <div class="status-value" id="active-positions">0</div>
-                    <div class="status-change" id="positions-change">0 new</div>
-                </div>
-                <div class="status-card">
-                    <h3>Win Rate</h3>
-                    <div class="status-value" id="win-rate">0%</div>
-                    <div class="status-change" id="win-rate-change">Last 30 days</div>
+                
+                <!-- Data Reset Controls -->
+                <div class="data-reset-section">
+                    <h3>Data Management</h3>
+                    <div class="reset-controls">
+                        <button id="reset-positions" class="reset-btn warning">Reset Positions</button>
+                        <button id="reset-signals" class="reset-btn warning">Reset Signals</button>
+                        <button id="reset-analytics" class="reset-btn warning">Reset Analytics</button>
+                        <button id="full-reset" class="reset-btn danger">Full System Reset</button>
+                    </div>
+                    <div class="reset-warning">
+                        <p>⚠️ Reset operations will permanently delete data. Use with caution.</p>
+                    </div>
                 </div>
             </div>
-
-            <!-- Charts Section -->
             <div class="charts-section">
                 <div class="chart-container">
                     <h3>Portfolio Performance</h3>
@@ -100,14 +126,8 @@
         </main>
     </div>
 
-    <script src="app.js"></script>
-    <script>
-        // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeDashboard();
-            startDataRefresh();
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dashboard-enhanced.js"></script>
 </body>
 </html>
 

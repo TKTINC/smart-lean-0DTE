@@ -1098,3 +1098,371 @@ input:checked + .slider:before {
     }
 }
 
+
+
+/* Analytics and Signals Page Content Formatting */
+
+/* Strategy Performance Table */
+.strategy-performance-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.strategy-performance-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.strategy-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.strategy-table th,
+.strategy-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+}
+
+.strategy-table th {
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+    color: #64ffda;
+}
+
+.strategy-table td {
+    color: #ffffff;
+}
+
+.strategy-table tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* AI Model Performance Section */
+.ai-performance-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.ai-performance-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.ai-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.ai-metric-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.ai-metric-item h4 {
+    font-size: 0.9rem;
+    color: #b0b0b0;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.ai-metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #64ffda;
+    margin-bottom: 0.25rem;
+}
+
+/* Risk Analysis Section */
+.risk-analysis-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.risk-analysis-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.risk-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.risk-metric-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.risk-metric-label {
+    font-size: 0.9rem;
+    color: #b0b0b0;
+    font-weight: 500;
+}
+
+.risk-metric-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* Historical Signals Table */
+.historical-signals-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.historical-signals-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.historical-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+.historical-table th,
+.historical-table td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.historical-table th {
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+    color: #64ffda;
+    font-size: 0.8rem;
+}
+
+.historical-table td {
+    color: #ffffff;
+}
+
+.historical-table tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.outcome-success {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.outcome-failure {
+    color: #f44336;
+    font-weight: 600;
+}
+
+.outcome-pending {
+    color: #ff9800;
+    font-weight: 600;
+}
+
+/* Signal Statistics Section */
+.signal-statistics-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.signal-statistics-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.statistics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.statistics-group {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.statistics-group h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #64ffda;
+}
+
+.statistic-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.statistic-item:last-child {
+    border-bottom: none;
+}
+
+.statistic-label {
+    font-size: 0.9rem;
+    color: #b0b0b0;
+    font-weight: 500;
+}
+
+.statistic-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* Performance Metrics in Statistics */
+.performance-metrics-group {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.performance-metrics-group h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #64ffda;
+}
+
+.performance-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.performance-item:last-child {
+    border-bottom: none;
+}
+
+.performance-label {
+    font-size: 0.9rem;
+    color: #b0b0b0;
+    font-weight: 500;
+}
+
+.performance-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.performance-value.positive {
+    color: #4CAF50;
+}
+
+.performance-value.negative {
+    color: #f44336;
+}
+
+/* Text Content Formatting */
+.content-text {
+    color: #ffffff;
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+.content-text h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.content-text h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #64ffda;
+}
+
+.content-text h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #b0b0b0;
+}
+
+.content-text p {
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+/* Responsive Design for Content Sections */
+@media (max-width: 768px) {
+    .ai-metrics-grid,
+    .risk-metrics-grid,
+    .statistics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .historical-table {
+        font-size: 0.75rem;
+    }
+    
+    .historical-table th,
+    .historical-table td {
+        padding: 0.4rem;
+    }
+    
+    .strategy-table {
+        font-size: 0.8rem;
+    }
+    
+    .strategy-table th,
+    .strategy-table td {
+        padding: 0.5rem;
+    }
+}
+

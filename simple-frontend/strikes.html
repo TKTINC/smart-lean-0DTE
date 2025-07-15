@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart-Lean-0DTE Strike Analysis</title>
-    <link rel="stylesheet" href="styles-enhanced.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 </head>
@@ -12,40 +12,23 @@
     <div class="app">
         <!-- Navigation -->
         <nav class="navbar">
-            <div class="nav-container">
-                <a href="index.html" class="nav-brand">Smart-Lean-0DTE</a>
-                <div class="nav-links">
-                    <a href="index.html" class="nav-link">Dashboard</a>
-                    <a href="trading.html" class="nav-link">Trading</a>
-                    <a href="analytics.html" class="nav-link">Analytics</a>
-                    <a href="signals.html" class="nav-link">Signals</a>
-                    <a href="strikes.html" class="nav-link active">Strikes</a>
-                    <a href="settings.html" class="nav-link">Settings</a>
-                </div>
+            <div class="nav-brand">
+                <h1>Smart-Lean-0DTE</h1>
+                <span class="nav-subtitle">Autonomous Trading System</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="trading.html" class="nav-link">Trading</a>
+                <a href="analytics.html" class="nav-link">Analytics</a>
+                <a href="signals.html" class="nav-link">Signals</a>
+                <a href="strikes.html" class="nav-link active">Strikes</a>
+                <a href="settings.html" class="nav-link">Settings</a>
+            </div>
+            <div class="nav-status">
+                <span id="connection-status" class="status-indicator">●</span>
+                <span id="connection-text">Connected</span>
             </div>
         </nav>
-
-        <!-- Header with Date/Time -->
-        <div class="header-info">
-            <div class="date-time">
-                <div class="current-date" id="currentDate"></div>
-                <div class="current-time" id="currentTime"></div>
-            </div>
-            <div class="trading-mode-toggle">
-                <span class="toggle-label">Paper</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="tradingModeToggle" onchange="toggleTradingMode()">
-                    <span class="toggle-slider"></span>
-                </label>
-                <span class="toggle-label">Live</span>
-            </div>
-        </div>
-
-        <!-- Page Title -->
-        <div class="page-title-section">
-            <h1 class="page-title">Smart-Lean-0DTE</h1>
-            <p class="page-subtitle">Autonomous Trading System</p>
-        </div>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -802,7 +785,4 @@
     </script>
 </body>
 </html>
-
-
-    <script src="dashboard-enhanced-v2.js"></script>
 

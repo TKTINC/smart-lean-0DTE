@@ -6,7 +6,6 @@
     <title>Smart-Lean-0DTE Strike Analysis</title>
     <link rel="stylesheet" href="styles-enhanced.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 </head>
 <body>
     <div class="app">
@@ -102,11 +101,11 @@
                 </div>
             </div>
 
-            <!-- Strike Chain Overview -->
+            <!-- Strike Chain Table -->
             <div class="strike-chain-section">
                 <h2>Strike Chain Overview (ATM ± 10 Strikes)</h2>
-                <div class="strike-chain-container">
-                    <table class="strike-chain-table">
+                <div class="strike-table-container">
+                    <table class="strike-table">
                         <thead>
                             <tr>
                                 <th colspan="5">CALLS</th>
@@ -127,127 +126,189 @@
                                 <th>Bid</th>
                             </tr>
                         </thead>
-                        <tbody id="strike-chain-tbody">
-                            <!-- Strike data will be populated here -->
+                        <tbody>
+                            <tr>
+                                <td>11.28</td><td>11.38</td><td>11.33</td><td>736</td><td>22.9%</td>
+                                <td class="strike-price">435</td>
+                                <td>32.3%</td><td>474</td><td>1.15</td><td>1.20</td><td>1.10</td>
+                            </tr>
+                            <tr>
+                                <td>11.11</td><td>11.21</td><td>11.16</td><td>164</td><td>27.3%</td>
+                                <td class="strike-price">436</td>
+                                <td>32.9%</td><td>614</td><td>1.52</td><td>1.57</td><td>1.47</td>
+                            </tr>
+                            <tr>
+                                <td>9.48</td><td>9.58</td><td>9.53</td><td>1202</td><td>29.7%</td>
+                                <td class="strike-price">437</td>
+                                <td>31.8%</td><td>1993</td><td>2.04</td><td>2.09</td><td>1.99</td>
+                            </tr>
+                            <tr>
+                                <td>7.51</td><td>7.61</td><td>7.56</td><td>1162</td><td>31.6%</td>
+                                <td class="strike-price">438</td>
+                                <td>15.9%</td><td>562</td><td>1.15</td><td>1.20</td><td>1.10</td>
+                            </tr>
+                            <tr>
+                                <td>7.25</td><td>7.35</td><td>7.30</td><td>2007</td><td>21.8%</td>
+                                <td class="strike-price">439</td>
+                                <td>23.0%</td><td>1708</td><td>0.80</td><td>0.85</td><td>0.75</td>
+                            </tr>
+                            <tr>
+                                <td>7.01</td><td>7.11</td><td>7.06</td><td>1943</td><td>25.3%</td>
+                                <td class="strike-price">440</td>
+                                <td>30.7%</td><td>181</td><td>1.80</td><td>1.85</td><td>1.75</td>
+                            </tr>
+                            <tr>
+                                <td>5.39</td><td>5.49</td><td>5.44</td><td>1415</td><td>23.5%</td>
+                                <td class="strike-price">441</td>
+                                <td>32.5%</td><td>447</td><td>1.41</td><td>1.46</td><td>1.36</td>
+                            </tr>
+                            <tr>
+                                <td>3.88</td><td>3.98</td><td>3.93</td><td>1167</td><td>33.2%</td>
+                                <td class="strike-price">442</td>
+                                <td>25.5%</td><td>1307</td><td>1.57</td><td>1.62</td><td>1.52</td>
+                            </tr>
+                            <tr>
+                                <td>3.93</td><td>4.03</td><td>3.98</td><td>1522</td><td>28.7%</td>
+                                <td class="strike-price">443</td>
+                                <td>31.2%</td><td>583</td><td>2.12</td><td>2.17</td><td>2.07</td>
+                            </tr>
+                            <tr>
+                                <td>3.14</td><td>3.24</td><td>3.19</td><td>1421</td><td>21.5%</td>
+                                <td class="strike-price">444</td>
+                                <td>31.6%</td><td>1056</td><td>1.29</td><td>1.34</td><td>1.24</td>
+                            </tr>
+                            <tr class="atm-row">
+                                <td>2.73</td><td>2.83</td><td>2.78</td><td>3450</td><td>23.5%</td>
+                                <td class="strike-price atm">445</td>
+                                <td>23.5%</td><td>2890</td><td>2.60</td><td>2.65</td><td>2.55</td>
+                            </tr>
+                            <tr>
+                                <td>1.82</td><td>1.92</td><td>1.87</td><td>2021</td><td>19.1%</td>
+                                <td class="strike-price">446</td>
+                                <td>20.9%</td><td>1816</td><td>2.34</td><td>2.39</td><td>2.29</td>
+                            </tr>
+                            <tr>
+                                <td>1.45</td><td>1.55</td><td>1.50</td><td>1893</td><td>18.2%</td>
+                                <td class="strike-price">447</td>
+                                <td>18.7%</td><td>1542</td><td>3.12</td><td>3.17</td><td>3.07</td>
+                            </tr>
+                            <tr>
+                                <td>1.15</td><td>1.25</td><td>1.20</td><td>1674</td><td>17.8%</td>
+                                <td class="strike-price">448</td>
+                                <td>17.2%</td><td>1389</td><td>3.89</td><td>3.94</td><td>3.84</td>
+                            </tr>
+                            <tr>
+                                <td>0.88</td><td>0.98</td><td>0.93</td><td>1456</td><td>16.9%</td>
+                                <td class="strike-price">449</td>
+                                <td>16.1%</td><td>1267</td><td>4.67</td><td>4.72</td><td>4.62</td>
+                            </tr>
+                            <tr>
+                                <td>0.65</td><td>0.75</td><td>0.70</td><td>1234</td><td>15.8%</td>
+                                <td class="strike-price">450</td>
+                                <td>15.3%</td><td>1156</td><td>5.45</td><td>5.50</td><td>5.40</td>
+                            </tr>
+                            <tr>
+                                <td>0.45</td><td>0.55</td><td>0.50</td><td>987</td><td>14.7%</td>
+                                <td class="strike-price">455</td>
+                                <td>14.2%</td><td>892</td><td>10.15</td><td>10.20</td><td>10.10</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Individual Strike Charts -->
-            <div class="strike-charts-section">
+            <!-- 2-Minute Interval Price Charts -->
+            <div class="charts-section">
                 <h2>2-Minute Interval Price Charts</h2>
                 
-                <!-- ATM Strike Chart -->
-                <div class="chart-container featured-chart">
+                <!-- ATM Chart -->
+                <div class="chart-container">
                     <h3>ATM Strike 445 - Call & Put Prices</h3>
                     <div class="chart-controls">
-                        <button class="chart-btn active" data-type="both">Both</button>
-                        <button class="chart-btn" data-type="call">Call Only</button>
-                        <button class="chart-btn" data-type="put">Put Only</button>
+                        <button class="chart-btn active" onclick="updateATMChart('both')">Both</button>
+                        <button class="chart-btn" onclick="updateATMChart('call')">Call Only</button>
+                        <button class="chart-btn" onclick="updateATMChart('put')">Put Only</button>
                     </div>
                     <canvas id="atmChart"></canvas>
                 </div>
 
-                <!-- ITM Calls Charts -->
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <h4>ITM Call 440 Strike</h4>
-                        <canvas id="call440Chart"></canvas>
+                <!-- Individual Strike Charts - Simplified -->
+                <div class="individual-strikes-section">
+                    <h3>Individual Strike Charts</h3>
+                    <div class="strike-chart-info">
+                        <p>Click on any strike below to view its 2-minute interval price chart:</p>
+                        <div class="strike-buttons-grid">
+                            <div class="strike-group">
+                                <h4>ITM Calls</h4>
+                                <button class="strike-btn" onclick="showStrikeInfo(440, 'call')">440 Call ($7.06)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(441, 'call')">441 Call ($5.44)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(442, 'call')">442 Call ($3.93)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(443, 'call')">443 Call ($3.98)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(444, 'call')">444 Call ($3.19)</button>
+                            </div>
+                            <div class="strike-group">
+                                <h4>OTM Calls</h4>
+                                <button class="strike-btn" onclick="showStrikeInfo(446, 'call')">446 Call ($1.87)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(447, 'call')">447 Call ($1.50)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(448, 'call')">448 Call ($1.20)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(449, 'call')">449 Call ($0.93)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(450, 'call')">450 Call ($0.70)</button>
+                            </div>
+                            <div class="strike-group">
+                                <h4>ITM Puts</h4>
+                                <button class="strike-btn" onclick="showStrikeInfo(450, 'put')">450 Put ($5.45)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(449, 'put')">449 Put ($4.67)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(448, 'put')">448 Put ($3.89)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(447, 'put')">447 Put ($3.12)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(446, 'put')">446 Put ($2.34)</button>
+                            </div>
+                            <div class="strike-group">
+                                <h4>OTM Puts</h4>
+                                <button class="strike-btn" onclick="showStrikeInfo(444, 'put')">444 Put ($1.29)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(443, 'put')">443 Put ($2.12)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(442, 'put')">442 Put ($1.57)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(441, 'put')">441 Put ($1.41)</button>
+                                <button class="strike-btn" onclick="showStrikeInfo(440, 'put')">440 Put ($1.80)</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="chart-container">
-                        <h4>ITM Call 441 Strike</h4>
-                        <canvas id="call441Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>ITM Call 442 Strike</h4>
-                        <canvas id="call442Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>ITM Call 443 Strike</h4>
-                        <canvas id="call443Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>ITM Call 444 Strike</h4>
-                        <canvas id="call444Chart"></canvas>
-                    </div>
-                </div>
 
-                <!-- OTM Calls Charts -->
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <h4>OTM Call 446 Strike</h4>
-                        <canvas id="call446Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>OTM Call 447 Strike</h4>
-                        <canvas id="call447Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>OTM Call 448 Strike</h4>
-                        <canvas id="call448Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>OTM Call 449 Strike</h4>
-                        <canvas id="call449Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>OTM Call 450 Strike</h4>
-                        <canvas id="call450Chart"></canvas>
-                    </div>
-                </div>
-
-                <!-- ITM Puts Charts -->
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <h4>ITM Put 450 Strike</h4>
-                        <canvas id="put450Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>ITM Put 449 Strike</h4>
-                        <canvas id="put449Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>ITM Put 448 Strike</h4>
-                        <canvas id="put448Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>ITM Put 447 Strike</h4>
-                        <canvas id="put447Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>ITM Put 446 Strike</h4>
-                        <canvas id="put446Chart"></canvas>
-                    </div>
-                </div>
-
-                <!-- OTM Puts Charts -->
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <h4>OTM Put 444 Strike</h4>
-                        <canvas id="put444Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>OTM Put 443 Strike</h4>
-                        <canvas id="put443Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>OTM Put 442 Strike</h4>
-                        <canvas id="put442Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>OTM Put 441 Strike</h4>
-                        <canvas id="put441Chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>OTM Put 440 Strike</h4>
-                        <canvas id="put440Chart"></canvas>
+                    <!-- Strike Info Display -->
+                    <div class="strike-info-display" id="strikeInfoDisplay" style="display: none;">
+                        <h4 id="strikeInfoTitle">Strike Information</h4>
+                        <div class="strike-info-content">
+                            <div class="strike-info-item">
+                                <span class="info-label">Current Price:</span>
+                                <span class="info-value" id="strikePrice">$0.00</span>
+                            </div>
+                            <div class="strike-info-item">
+                                <span class="info-label">Volume:</span>
+                                <span class="info-value" id="strikeVolume">0</span>
+                            </div>
+                            <div class="strike-info-item">
+                                <span class="info-label">Implied Volatility:</span>
+                                <span class="info-value" id="strikeIV">0%</span>
+                            </div>
+                            <div class="strike-info-item">
+                                <span class="info-label">Delta:</span>
+                                <span class="info-value" id="strikeDelta">0.00</span>
+                            </div>
+                            <div class="strike-info-item">
+                                <span class="info-label">Gamma:</span>
+                                <span class="info-value" id="strikeGamma">0.00</span>
+                            </div>
+                            <div class="strike-info-item">
+                                <span class="info-label">Theta:</span>
+                                <span class="info-value" id="strikeTheta">0.00</span>
+                            </div>
+                        </div>
+                        <p class="chart-note">📈 <strong>Note:</strong> Individual 2-minute interval charts will be available once connected to live data feed. Currently showing strike information and Greeks analysis.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Strike Performance Summary -->
-            <div class="strike-performance-section">
+            <div class="performance-section">
                 <h2>Strike Performance Summary</h2>
                 <div class="performance-grid">
                     <div class="performance-card">
@@ -265,13 +326,13 @@
                     <div class="performance-card">
                         <h3>Highest Volume Call</h3>
                         <div class="performance-strike">445 Strike (ATM)</div>
-                        <div class="performance-change">$2.78 (Last)</div>
+                        <div class="performance-price">$2.78 (Last)</div>
                         <div class="performance-volume">Volume: 3,450</div>
                     </div>
                     <div class="performance-card">
                         <h3>Highest Volume Put</h3>
                         <div class="performance-strike">445 Strike (ATM)</div>
-                        <div class="performance-change">$2.65 (Last)</div>
+                        <div class="performance-price">$2.65 (Last)</div>
                         <div class="performance-volume">Volume: 2,890</div>
                     </div>
                 </div>
@@ -280,20 +341,20 @@
             <!-- Greeks Analysis -->
             <div class="greeks-section">
                 <h2>Greeks Analysis</h2>
-                <div class="greeks-container">
-                    <div class="greeks-chart">
+                <div class="greeks-grid">
+                    <div class="chart-container">
                         <h3>Delta by Strike</h3>
                         <canvas id="deltaChart"></canvas>
                     </div>
-                    <div class="greeks-chart">
+                    <div class="chart-container">
                         <h3>Gamma by Strike</h3>
                         <canvas id="gammaChart"></canvas>
                     </div>
-                    <div class="greeks-chart">
+                    <div class="chart-container">
                         <h3>Theta by Strike</h3>
                         <canvas id="thetaChart"></canvas>
                     </div>
-                    <div class="greeks-chart">
+                    <div class="chart-container">
                         <h3>Vega by Strike</h3>
                         <canvas id="vegaChart"></canvas>
                     </div>
@@ -306,263 +367,61 @@
         // Initialize strikes page
         document.addEventListener('DOMContentLoaded', function() {
             initializeStrikesPage();
-            loadStrikeChain();
-            initializeCharts();
-            setupEventListeners();
-            startRealTimeUpdates();
         });
 
         function initializeStrikesPage() {
-            // Setup chart type buttons
-            const chartButtons = document.querySelectorAll('.chart-btn');
-            chartButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    chartButtons.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    updateATMChart(this.dataset.type);
-                });
-            });
-
-            // Setup refresh button
-            document.getElementById('refresh-data').addEventListener('click', function() {
-                refreshAllData();
-            });
-        }
-
-        function loadStrikeChain() {
-            // Generate strike chain data (ATM ± 10 strikes)
-            const currentPrice = 444.85;
-            const atmStrike = Math.round(currentPrice);
-            const tbody = document.getElementById('strike-chain-tbody');
-            
-            tbody.innerHTML = '';
-            
-            for (let i = -10; i <= 10; i++) {
-                const strike = atmStrike + i;
-                const isATM = i === 0;
-                const row = createStrikeRow(strike, isATM);
-                tbody.appendChild(row);
-            }
-        }
-
-        function createStrikeRow(strike, isATM) {
-            const row = document.createElement('tr');
-            if (isATM) row.classList.add('atm-row');
-            
-            // Sample data - would come from API
-            const callData = generateOptionData(strike, 'call');
-            const putData = generateOptionData(strike, 'put');
-            
-            row.innerHTML = `
-                <td class="call-data">${callData.bid}</td>
-                <td class="call-data">${callData.ask}</td>
-                <td class="call-data">${callData.last}</td>
-                <td class="call-data">${callData.volume}</td>
-                <td class="call-data">${callData.iv}%</td>
-                <td class="strike-price ${isATM ? 'atm' : ''}">${strike}</td>
-                <td class="put-data">${putData.iv}%</td>
-                <td class="put-data">${putData.volume}</td>
-                <td class="put-data">${putData.last}</td>
-                <td class="put-data">${putData.ask}</td>
-                <td class="put-data">${putData.bid}</td>
-            `;
-            
-            return row;
-        }
-
-        function generateOptionData(strike, type) {
-            // Generate realistic option data based on strike and type
-            const currentPrice = 444.85;
-            const isCall = type === 'call';
-            const moneyness = isCall ? (currentPrice - strike) : (strike - currentPrice);
-            
-            let intrinsic = Math.max(moneyness, 0);
-            let extrinsic = Math.random() * 2 + 0.5;
-            let price = intrinsic + extrinsic;
-            
-            return {
-                bid: (price - 0.05).toFixed(2),
-                ask: (price + 0.05).toFixed(2),
-                last: price.toFixed(2),
-                volume: Math.floor(Math.random() * 2000 + 100),
-                iv: (Math.random() * 20 + 15).toFixed(1)
-            };
-        }
-
-        function initializeCharts() {
-            // ATM Chart (Featured)
+            // Initialize only essential charts to prevent browser hang
             initializeATMChart();
-            
-            // Individual strike charts
-            initializeStrikeCharts();
-            
-            // Greeks charts
             initializeGreeksCharts();
+            setupEventListeners();
         }
 
         function initializeATMChart() {
-            const ctx = document.getElementById('atmChart').getContext('2d');
-            
-            // Generate 2-minute interval data for today
-            const timeLabels = generateTimeLabels();
-            const callPrices = generatePriceData(timeLabels.length, 2.45, 0.3);
-            const putPrices = generatePriceData(timeLabels.length, 2.35, 0.25);
-            
-            new Chart(ctx, {
+            // ATM Strike 445 - Combined Call & Put Chart
+            const atmCtx = document.getElementById('atmChart').getContext('2d');
+            window.atmChart = new Chart(atmCtx, {
                 type: 'line',
                 data: {
-                    labels: timeLabels,
+                    labels: ['14:00', '14:02', '14:04', '14:06', '14:08', '14:10', '14:12', '14:14', '14:16', '14:18', '14:20', '14:22'],
                     datasets: [{
                         label: 'Call 445',
-                        data: callPrices,
+                        data: [2.45, 2.52, 2.48, 2.61, 2.58, 2.73, 2.69, 2.81, 2.78, 2.85, 2.82, 2.78],
                         borderColor: '#10B981',
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        borderWidth: 2,
-                        pointRadius: 1
+                        fill: false,
+                        tension: 0.1
                     }, {
                         label: 'Put 445',
-                        data: putPrices,
+                        data: [2.85, 2.78, 2.82, 2.69, 2.72, 2.57, 2.61, 2.49, 2.52, 2.45, 2.48, 2.65],
                         borderColor: '#3B82F6',
                         backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        borderWidth: 2,
-                        pointRadius: 1
+                        fill: false,
+                        tension: 0.1
                     }]
                 },
-                options: {
-                    responsive: true,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'minute',
-                                stepSize: 30,
-                                displayFormats: {
-                                    minute: 'HH:mm'
-                                }
-                            },
-                            ticks: { color: '#E5E7EB' },
-                            grid: { color: '#374151' }
-                        },
-                        y: {
-                            ticks: { color: '#E5E7EB' },
-                            grid: { color: '#374151' }
-                        }
-                    },
-                    plugins: {
-                        legend: { labels: { color: '#E5E7EB' } },
-                        tooltip: {
-                            backgroundColor: '#1F2937',
-                            titleColor: '#E5E7EB',
-                            bodyColor: '#E5E7EB',
-                            borderColor: '#374151',
-                            borderWidth: 1
-                        }
-                    }
-                }
-            });
-        }
-
-        function initializeStrikeCharts() {
-            // Initialize charts for all strikes (440-450 calls and puts)
-            const strikes = [440, 441, 442, 443, 444, 446, 447, 448, 449, 450];
-            
-            strikes.forEach(strike => {
-                // Call charts
-                const callCtx = document.getElementById(`call${strike}Chart`);
-                if (callCtx) {
-                    initializeIndividualChart(callCtx, strike, 'call');
-                }
-                
-                // Put charts
-                const putCtx = document.getElementById(`put${strike}Chart`);
-                if (putCtx) {
-                    initializeIndividualChart(putCtx, strike, 'put');
-                }
-            });
-        }
-
-        function initializeIndividualChart(ctx, strike, type) {
-            const timeLabels = generateTimeLabels();
-            const basePrice = calculateBasePrice(strike, type);
-            const priceData = generatePriceData(timeLabels.length, basePrice, 0.2);
-            
-            const color = type === 'call' ? '#10B981' : '#3B82F6';
-            
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: timeLabels,
-                    datasets: [{
-                        label: `${type.toUpperCase()} ${strike}`,
-                        data: priceData,
-                        borderColor: color,
-                        backgroundColor: color + '20',
-                        borderWidth: 1.5,
-                        pointRadius: 0.5,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'hour',
-                                displayFormats: {
-                                    hour: 'HH:mm'
-                                }
-                            },
-                            ticks: { 
-                                color: '#9CA3AF',
-                                maxTicksLimit: 4
-                            },
-                            grid: { color: '#374151' }
-                        },
-                        y: {
-                            ticks: { 
-                                color: '#9CA3AF',
-                                maxTicksLimit: 5
-                            },
-                            grid: { color: '#374151' }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#1F2937',
-                            titleColor: '#E5E7EB',
-                            bodyColor: '#E5E7EB'
-                        }
-                    }
-                }
+                options: getTimeSeriesChartOptions('Option Price ($)')
             });
         }
 
         function initializeGreeksCharts() {
-            const strikes = [435, 437, 439, 441, 443, 445, 447, 449, 451, 453, 455];
-            
             // Delta Chart
             const deltaCtx = document.getElementById('deltaChart').getContext('2d');
             new Chart(deltaCtx, {
                 type: 'line',
                 data: {
-                    labels: strikes,
+                    labels: ['435', '440', '441', '442', '443', '444', '445', '446', '447', '448', '449', '450', '455'],
                     datasets: [{
                         label: 'Call Delta',
-                        data: strikes.map(s => calculateDelta(s, 'call')),
+                        data: [0.95, 0.85, 0.78, 0.71, 0.64, 0.57, 0.50, 0.43, 0.36, 0.29, 0.22, 0.15, 0.05],
                         borderColor: '#10B981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)'
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: false
                     }, {
                         label: 'Put Delta',
-                        data: strikes.map(s => calculateDelta(s, 'put')),
-                        borderColor: '#3B82F6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)'
+                        data: [-0.05, -0.15, -0.22, -0.29, -0.36, -0.43, -0.50, -0.57, -0.64, -0.71, -0.78, -0.85, -0.95],
+                        borderColor: '#EF4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        fill: false
                     }]
                 },
                 options: getGreeksChartOptions('Delta')
@@ -573,12 +432,13 @@
             new Chart(gammaCtx, {
                 type: 'line',
                 data: {
-                    labels: strikes,
+                    labels: ['435', '440', '441', '442', '443', '444', '445', '446', '447', '448', '449', '450', '455'],
                     datasets: [{
                         label: 'Gamma',
-                        data: strikes.map(s => calculateGamma(s)),
+                        data: [0.02, 0.08, 0.12, 0.18, 0.24, 0.28, 0.32, 0.28, 0.24, 0.18, 0.12, 0.08, 0.02],
                         borderColor: '#F59E0B',
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)'
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        fill: true
                     }]
                 },
                 options: getGreeksChartOptions('Gamma')
@@ -589,17 +449,13 @@
             new Chart(thetaCtx, {
                 type: 'line',
                 data: {
-                    labels: strikes,
+                    labels: ['435', '440', '441', '442', '443', '444', '445', '446', '447', '448', '449', '450', '455'],
                     datasets: [{
-                        label: 'Call Theta',
-                        data: strikes.map(s => calculateTheta(s, 'call')),
-                        borderColor: '#EF4444',
-                        backgroundColor: 'rgba(239, 68, 68, 0.1)'
-                    }, {
-                        label: 'Put Theta',
-                        data: strikes.map(s => calculateTheta(s, 'put')),
+                        label: 'Theta',
+                        data: [-0.02, -0.08, -0.12, -0.18, -0.24, -0.28, -0.32, -0.28, -0.24, -0.18, -0.12, -0.08, -0.02],
                         borderColor: '#8B5CF6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)'
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        fill: false
                     }]
                 },
                 options: getGreeksChartOptions('Theta')
@@ -610,81 +466,52 @@
             new Chart(vegaCtx, {
                 type: 'line',
                 data: {
-                    labels: strikes,
+                    labels: ['435', '440', '441', '442', '443', '444', '445', '446', '447', '448', '449', '450', '455'],
                     datasets: [{
                         label: 'Vega',
-                        data: strikes.map(s => calculateVega(s)),
-                        borderColor: '#06B6D4',
-                        backgroundColor: 'rgba(6, 182, 212, 0.1)'
+                        data: [0.05, 0.15, 0.22, 0.28, 0.32, 0.35, 0.38, 0.35, 0.32, 0.28, 0.22, 0.15, 0.05],
+                        borderColor: '#EC4899',
+                        backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                        fill: true
                     }]
                 },
                 options: getGreeksChartOptions('Vega')
             });
         }
 
-        function generateTimeLabels() {
-            const labels = [];
-            const start = new Date();
-            start.setHours(9, 30, 0, 0); // Market open
-            
-            for (let i = 0; i < 390; i += 2) { // 2-minute intervals for 6.5 hours
-                const time = new Date(start.getTime() + i * 60000);
-                labels.push(time);
-            }
-            
-            return labels;
-        }
-
-        function generatePriceData(length, basePrice, volatility) {
-            const data = [];
-            let price = basePrice;
-            
-            for (let i = 0; i < length; i++) {
-                price += (Math.random() - 0.5) * volatility;
-                price = Math.max(0.01, price); // Minimum price
-                data.push(parseFloat(price.toFixed(2)));
-            }
-            
-            return data;
-        }
-
-        function calculateBasePrice(strike, type) {
-            const currentPrice = 444.85;
-            const isCall = type === 'call';
-            const moneyness = isCall ? (currentPrice - strike) : (strike - currentPrice);
-            const intrinsic = Math.max(moneyness, 0);
-            const extrinsic = Math.random() * 2 + 0.5;
-            return intrinsic + extrinsic;
-        }
-
-        function calculateDelta(strike, type) {
-            const currentPrice = 444.85;
-            const isCall = type === 'call';
-            
-            if (isCall) {
-                return Math.max(0, Math.min(1, 0.5 + (currentPrice - strike) * 0.1));
-            } else {
-                return Math.max(-1, Math.min(0, -0.5 - (currentPrice - strike) * 0.1));
-            }
-        }
-
-        function calculateGamma(strike) {
-            const currentPrice = 444.85;
-            const distance = Math.abs(currentPrice - strike);
-            return Math.max(0.001, 0.1 * Math.exp(-distance * 0.1));
-        }
-
-        function calculateTheta(strike, type) {
-            const currentPrice = 444.85;
-            const distance = Math.abs(currentPrice - strike);
-            const baseTheta = -0.05 - distance * 0.01;
-            return Math.min(-0.001, baseTheta);
-        }
-
-        function calculateVega(strike) {
-            const currentPrice = 444.85;
-            const distance = Math.abs(currentPrice - strike);
-            return Math.max(0.001, 0.15 * Math.exp(-distance * 0.05));
+        function getTimeSeriesChartOptions(yAxisLabel) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            color: '#E5E7EB'
+                        },
+                        ticks: { color: '#E5E7EB' },
+                        grid: { color: '#374151' }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: yAxisLabel,
+                            color: '#E5E7EB'
+                        },
+                        ticks: { color: '#E5E7EB' },
+                        grid: { color: '#374151' }
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: '#E5E7EB' } },
+                    tooltip: {
+                        backgroundColor: '#1F2937',
+                        titleColor: '#E5E7EB',
+                        bodyColor: '#E5E7EB'
+                    }
+                }
+            };
         }
 
         function getGreeksChartOptions(title) {
@@ -722,65 +549,93 @@
             };
         }
 
+        function updateATMChart(type) {
+            // Update ATM chart to show calls, puts, or both
+            const chart = window.atmChart;
+            const datasets = chart.data.datasets;
+            
+            // Update button states
+            document.querySelectorAll('.chart-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide datasets based on selection
+            if (type === 'both') {
+                datasets[0].hidden = false; // Call
+                datasets[1].hidden = false; // Put
+            } else if (type === 'call') {
+                datasets[0].hidden = false; // Call
+                datasets[1].hidden = true;  // Put
+            } else if (type === 'put') {
+                datasets[0].hidden = true;  // Call
+                datasets[1].hidden = false; // Put
+            }
+            
+            chart.update();
+        }
+
+        function showStrikeInfo(strike, type) {
+            // Show strike information instead of creating individual charts
+            const display = document.getElementById('strikeInfoDisplay');
+            const title = document.getElementById('strikeInfoTitle');
+            
+            // Sample data for demonstration
+            const strikeData = getStrikeData(strike, type);
+            
+            title.textContent = `${type.toUpperCase()} ${strike} Strike Information`;
+            document.getElementById('strikePrice').textContent = `$${strikeData.price}`;
+            document.getElementById('strikeVolume').textContent = strikeData.volume;
+            document.getElementById('strikeIV').textContent = `${strikeData.iv}%`;
+            document.getElementById('strikeDelta').textContent = strikeData.delta;
+            document.getElementById('strikeGamma').textContent = strikeData.gamma;
+            document.getElementById('strikeTheta').textContent = strikeData.theta;
+            
+            display.style.display = 'block';
+            display.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getStrikeData(strike, type) {
+            // Sample strike data - would come from API in real implementation
+            const basePrice = type === 'call' ? 
+                Math.max(0.05, (445 - strike) * 0.1 + 2.5) : 
+                Math.max(0.05, (strike - 445) * 0.1 + 2.5);
+            
+            return {
+                price: basePrice.toFixed(2),
+                volume: Math.floor(Math.random() * 2000) + 500,
+                iv: (Math.random() * 20 + 15).toFixed(1),
+                delta: type === 'call' ? 
+                    (0.5 + (445 - strike) * 0.05).toFixed(2) : 
+                    (0.5 - (445 - strike) * 0.05).toFixed(2),
+                gamma: (Math.random() * 0.3 + 0.1).toFixed(2),
+                theta: (-Math.random() * 0.3 - 0.1).toFixed(2)
+            };
+        }
+
         function setupEventListeners() {
             // Symbol change
             document.getElementById('symbol-select').addEventListener('change', function() {
-                refreshAllData();
+                console.log('Symbol changed to:', this.value);
             });
 
             // Expiry change
             document.getElementById('expiry-select').addEventListener('change', function() {
-                refreshAllData();
+                console.log('Expiry changed to:', this.value);
             });
 
             // Time range change
             document.getElementById('time-range-select').addEventListener('change', function() {
-                updateTimeRange();
+                console.log('Time range changed to:', this.value);
             });
 
             // Chart type change
             document.getElementById('chart-type-select').addEventListener('change', function() {
-                updateChartType(this.value);
+                console.log('Chart type changed to:', this.value);
             });
-        }
 
-        function updateATMChart(type) {
-            // Update ATM chart to show calls, puts, or both
-            console.log('Updating ATM chart to show:', type);
-        }
-
-        function refreshAllData() {
-            // Refresh all strike data and charts
-            loadStrikeChain();
-            // Refresh charts with new data
-            console.log('Refreshing all strike data');
-        }
-
-        function updateTimeRange() {
-            // Update all charts with new time range
-            console.log('Updating time range');
-        }
-
-        function updateChartType(type) {
-            // Update charts to show different metrics (price, volume, IV, etc.)
-            console.log('Updating chart type to:', type);
-        }
-
-        function startRealTimeUpdates() {
-            // Update strike data every 30 seconds
-            setInterval(function() {
-                fetch('/api/strikes/realtime')
-                    .then(response => response.json())
-                    .then(data => {
-                        updateStrikeData(data);
-                    })
-                    .catch(error => console.log('Strike data update failed'));
-            }, 30000);
-        }
-
-        function updateStrikeData(data) {
-            // Update strike chain and charts with real-time data
-            console.log('Updating strike data:', data);
+            // Refresh button
+            document.getElementById('refresh-data').addEventListener('click', function() {
+                console.log('Refreshing strike data');
+            });
         }
     </script>
 </body>

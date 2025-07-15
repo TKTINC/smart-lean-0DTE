@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart-Lean-0DTE Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-enhanced.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -23,42 +23,26 @@
                 <a href="strikes.html" class="nav-link">Strikes</a>
                 <a href="settings.html" class="nav-link">Settings</a>
             </div>
-            <div class="nav-status">
-                <span id="connection-status" class="status-indicator">●</span>
-                <span id="connection-text">Connecting...</span>
-            </div>
         </nav>
+
+        <!-- Header with Date/Time -->
+        <div class="header-info">
+            <div class="date-time">
+                <div class="current-date" id="currentDate"></div>
+                <div class="current-time" id="currentTime"></div>
+            </div>
+            <div class="trading-mode-toggle">
+                <span class="toggle-label">Paper</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="tradingModeToggle" onchange="toggleTradingMode()">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Live</span>
+            </div>
+        </div>
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Trading Mode Controls -->
-            <div class="trading-mode-section">
-                <h2>Trading Mode</h2>
-                <div class="trading-mode-card">
-                    <div class="mode-indicator" id="tradingModeIndicator">
-                        <span id="currentMode">PAPER</span>
-                    </div>
-                    <div class="trading-mode-controls">
-                        <button id="paperModeBtn" class="mode-btn active" onclick="switchTradingMode('paper')">
-                            📝 Paper Trading
-                        </button>
-                        <button id="liveModeBtn" class="mode-btn" onclick="switchTradingMode('live')">
-                            💰 Live Trading
-                        </button>
-                    </div>
-                    <div class="mode-info">
-                        <div class="info-item">
-                            <span class="label">Account Balance:</span>
-                            <span id="accountBalance">$100,000.00</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label">Session:</span>
-                            <span id="sessionInfo">Active</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- System Status Cards -->
             <!-- Market Status -->
             <div class="market-status-section">
@@ -86,8 +70,8 @@
                     </div>
                     <div class="status-item">
                         <div class="status-label">AI Engine</div>
-                        <div class="status-value" id="ai-status">Learning</div>
-                        <div class="status-indicator active" id="ai-indicator">●</div>
+                        <div class="status-value" id="ai-engine-status">Active</div>
+                        <div class="status-indicator active" id="ai-engine-indicator">●</div>
                     </div>
                     <div class="status-item">
                         <div class="status-label">Last Update</div>
@@ -95,21 +79,35 @@
                         <div class="status-indicator active" id="update-indicator">●</div>
                     </div>
                 </div>
-                
-                <!-- Data Reset Controls -->
-                <div class="data-reset-section">
-                    <h3>Data Management</h3>
-                    <div class="reset-controls">
-                        <button id="reset-positions" class="reset-btn warning">Reset Positions</button>
-                        <button id="reset-signals" class="reset-btn warning">Reset Signals</button>
-                        <button id="reset-analytics" class="reset-btn warning">Reset Analytics</button>
-                        <button id="full-reset" class="reset-btn danger">Full System Reset</button>
+            </div>
+            
+            <!-- Portfolio Overview -->
+            <div class="portfolio-section">
+                <h2>Portfolio Overview</h2>
+                <div class="portfolio-grid">
+                    <div class="portfolio-card">
+                        <h3>Total Portfolio Value</h3>
+                        <div class="portfolio-value" data-metric="portfolio-value">$125,847.32</div>
+                        <div class="portfolio-change positive">+$2,847.32 (2.31%)</div>
                     </div>
-                    <div class="reset-warning">
-                        <p>⚠️ Reset operations will permanently delete data. Use with caution.</p>
+                    <div class="portfolio-card">
+                        <h3>Today's P&L</h3>
+                        <div class="portfolio-value" data-metric="daily-pnl">+$1,247.85</div>
+                        <div class="portfolio-change positive">+0.99%</div>
+                    </div>
+                    <div class="portfolio-card">
+                        <h3>Total P&L</h3>
+                        <div class="portfolio-value" data-metric="total-pnl">+$25,847.32</div>
+                        <div class="portfolio-change positive">+25.85%</div>
+                    </div>
+                    <div class="portfolio-card">
+                        <h3>Win Rate</h3>
+                        <div class="portfolio-value" data-metric="win-rate">78.5%</div>
+                        <div class="portfolio-change positive">+2.1%</div>
                     </div>
                 </div>
             </div>
+
             <div class="charts-section">
                 <div class="chart-container">
                     <h3>Portfolio Performance</h3>
@@ -132,30 +130,11 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Market Status -->
-            <div class="market-section">
-                <h3>Market Status</h3>
-                <div class="market-info">
-                    <div class="market-item">
-                        <span class="market-label">Market Hours:</span>
-                        <span id="market-hours" class="market-value">Checking...</span>
-                    </div>
-                    <div class="market-item">
-                        <span class="market-label">Trading Mode:</span>
-                        <span id="trading-mode" class="market-value">Manual</span>
-                    </div>
-                    <div class="market-item">
-                        <span class="market-label">System Status:</span>
-                        <span id="system-status" class="market-value">Initializing</span>
-                    </div>
-                </div>
-            </div>
         </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="dashboard-enhanced.js"></script>
+    <script src="dashboard-enhanced-v2.js"></script>
 </body>
 </html>
 
